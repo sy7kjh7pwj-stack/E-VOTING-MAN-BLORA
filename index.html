@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Voting OSIS</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        header h1 {
+            margin-bottom: 8px;
+        }
+
+        header p {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .login-box,
+        .result-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-size: 16px;
+        }
+
+        button {
+            border: none;
+            padding: 13px 20px;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .candidates {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .candidate {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 3px solid transparent;
+            transition: 0.2s;
+        }
+
+        .candidate:hover {
+            transform: translateY(-3px);
+        }
+
+        .candidate.selected {
+            border-color: #2563eb;
+        }
+
+        .candidate img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 4px solid #dbeafe;
+        }
+
+        .candidate h3 {
+            margin-bottom: 8px;
+        }
+
+        .candidate p {
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+
+        .vote-button {
+            width: 100%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .result {
+            margin-top: 15px;
+        }
+
+        .result-item {
+            margin: 15px 0;
+        }
+
+        .bar {
+            background: #e2e8f0;
+            height: 25px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .bar-fill {
+            background: #2563eb;
+            height: 100%;
+            color: white;
+            text-align: right;
+            padding-right: 8px;
+            line-height: 25px;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🗳️ E-Voting OSIS</h1>
+    <p>Pemilihan Ketua dan Wakil OSIS</p>
+</header>
+
+<div class="container">
+
+    <!-- LOGIN -->
+    <div class="login-box" id="loginBox">
+        <h2>Login Pemilih</h2>
+        <p>Masukkan nama atau nomor peserta untuk mengikuti pemilihan.</p>
+
+        <input
+            type="text"
+            id="voterName"
+            placeholder="Masukkan nama / nomor peserta"
+        >
+
+        <button onclick="login()">Masuk & Memilih</button>
+
+        <p id="loginMessage"></p>
+    </div>
+
+    <!-- PEMILIHAN -->
+    <div id="votingSection" class="hidden">
+        <h2>Daftar Kandidat</h2>
+        <p id="welcome"></p>
+
+        <div class="candidates">
+
+            <!-- KANDIDAT 1 -->
+            <div class="candidate" id="candidate1">
+                <img src="https://via.placeholder.com/300?text=Calon+1"
+                     alt="Calon 1">
+
+                <h3>Paslon 01</h3>
+                <p>
+                    <strong>Ahmad & Budi</strong>
+                </p>
+
+                <p>
+                    Visi: Mewujudkan OSIS yang aktif,
+                    kreatif, dan berprestasi.
+                </p>
+
+                <button
+                    class="vote-button"
+                    onclick="vote(1)">
+                    Pilih Paslon 01
+                </button>
+            </div>
+
+            <!-- KANDIDAT 2 -->
+            <div class="candidate" id="candidate2">
+                <img src="https://via.placeholder.com/300?text=Calon+2"
+                     alt="Calon 2">
+
+                <h3>Paslon 02</h3>
+                <p>
+                    <strong>Citra & Dinda</strong>
+                </p>
+
+                <p>
+                    Visi: Membangun sekolah yang
+                    kompak, disiplin, dan inovatif.
+                </p>
+
+                <button
+                    class="vote-button"
+                    onclick="vote(2)">
+                    Pilih Paslon 02
+                </button>
+            </div>
+
+            <!-- KANDIDAT 3 -->
+            <div class="candidate" id="candidate3">
+                <img src="https://via.placeholder.com/300?text=Calon+3"
+                     alt="Calon 3">
+
+                <h3>Paslon 03</h3>
+                <p>
+                    <strong>Eko & Fajar</strong>
+                </p>
+
+                <p>
+                    Visi: Menjadikan OSIS sebagai
+                    wadah aspirasi seluruh siswa.
+                </p>
+
+                <button
+                    class="vote-button"
+                    onclick="vote(3)">
+                    Pilih Paslon 03
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- HASIL -->
+    <div class="result-box">
+        <h2>📊 Hasil Sementara</h2>
+
+        <div id="results"></div>
+
+        <button onclick="resetVotes()"
+                style="background:#dc2626; margin-top:15px;">
+            Reset Data Demo
+        </button>
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 E-Voting OSIS | Untuk keperluan tugas organisasi</p>
+</footer>
+
+<script>
+    let currentVoter = "";
+
+    // Mengambil data suara
+    function getVotes() {
+        return JSON.parse(
+            localStorage.getItem("osisVotes")
+        ) || {
+            1: 0,
+            2: 0,
+            3: 0
+        };
+    }
+
+    // Login
+    function login() {
+        const name = document
+            .getElementById("voterName")
+            .value
+            .trim();
+
+        const message =
+            document.getElementById("loginMessage");
+
+        if (name === "") {
+            message.innerHTML =
+                "<span style='color:red'>Nama/nomor peserta harus diisi.</span>";
+            return;
+        }
+
+        const votedUsers =
+            JSON.parse(
+                localStorage.getItem("votedUsers")
+            ) || [];
+
+        if (votedUsers.includes(name.toLowerCase())) {
+            message.innerHTML =
+                "<span style='color:red'>Pemilih ini sudah memberikan suara.</span>";
+            return;
+        }
+
+        currentVoter = name;
+
+        document
+            .getElementById("loginBox")
+            .classList.add("hidden");
+
+        document
+            .getElementById("votingSection")
+            .classList.remove("hidden");
+
+        document.getElementById("welcome").innerText =
+            "Selamat datang, " + name +
+            ". Silakan pilih salah satu pasangan calon.";
+    }
+
+    // Voting
+    function vote(candidate) {
+
+        const names = {
+            1: "Paslon 01 - Ahmad & Budi",
+            2: "Paslon 02 - Citra & Dinda",
+            3: "Paslon 03 - Eko & Fajar"
+        };
+
+        const confirmation = confirm(
+            "Apakah kamu yakin memilih " +
+            names[candidate] +
+            "?"
+        );
+
+        if (!confirmation) {
+            return;
+        }
+
+        let votes = getVotes();
+
+        votes[candidate]++;
+
+        localStorage.setItem(
+            "osisVotes",
+            JSON.stringify(votes)
+        );
+
+        // Tandai pemilih sudah memilih
+        let votedUsers =
+            JSON.parse(
+                localStorage.getItem("votedUsers")
+            ) || [];
+
+        votedUsers.push(
+            currentVoter.toLowerCase()
+        );
+
+        localStorage.setItem(
+            "votedUsers",
+            JSON.stringify(votedUsers)
+        );
+
+        alert(
+            "Terima kasih! Suara kamu berhasil disimpan."
+        );
+
+        document
+            .getElementById("votingSection")
+            .classList.add("hidden");
+
+        document
+            .getElementById("loginBox")
+            .classList.remove("hidden");
+
+        document.getElementById("voterName").value = "";
+
+        showResults();
+    }
+
+    // Menampilkan hasil
+    function showResults() {
+
+        const votes = getVotes();
+
+        const total =
+            votes[1] +
+            votes[2] +
+            votes[3];
+
+        const names = {
+            1: "Paslon 01 - Ahmad & Budi",
+            2: "Paslon 02 - Citra & Dinda",
+            3: "Paslon 03 - Eko & Fajar"
+        };
+
+        let html = "";
+
+        for (let i = 1; i <= 3; i++) {
+
+            const percentage =
+                total === 0
+                ? 0
+                : Math.round(
+                    (votes[i] / total) * 100
+                );
+
+            html += `
+                <div class="result-item">
+                    <strong>${names[i]}</strong>
+                    <span>${votes[i]} suara (${percentage}%)</span>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:${percentage}%">
+                            ${percentage}%
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.getElementById("results").innerHTML =
+            html;
+    }
+
+    // Reset demo
+    function resetVotes() {
+
+        const confirmation = confirm(
+            "Hapus semua data suara demo?"
+        );
+
+        if (!confirmation) {
+            return;
+        }
+
+        localStorage.removeItem("osisVotes");
+        localStorage.removeItem("votedUsers");
+
+        showResults();
+
+        alert("Data demo berhasil dihapus.");
+    }
+
+    // Tampilkan hasil saat halaman dibuka
+    showResults();
+</script>
+
+</body>
+</html>
