@@ -29,20 +29,18 @@
       width: 100px;
       height: 100px;
       object-fit: contain;
-      margin-bottom: 10px;
     }
 
     header h1 {
-      margin: 5px 0;
+      margin: 8px 0;
       font-size: 30px;
     }
 
     header p {
-      margin: 7px 0;
+      margin: 6px 0;
     }
 
     .container {
-      width: 100%;
       max-width: 720px;
       margin: 25px auto;
       padding: 15px;
@@ -53,7 +51,7 @@
       border-radius: 16px;
       padding: 25px;
       margin-bottom: 20px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      box-shadow: 0 5px 20px rgba(0,0,0,.08);
     }
 
     h2 {
@@ -78,7 +76,7 @@
     button {
       width: 100%;
       padding: 15px;
-      border: none;
+      border: 0;
       border-radius: 9px;
       background: #087f3e;
       color: white;
@@ -92,6 +90,11 @@
       background: #066b34;
     }
 
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
     .paslon {
       border: 2px solid #d8eadc;
       border-radius: 14px;
@@ -101,8 +104,8 @@
     }
 
     .paslon h3 {
-      margin: 0 0 8px;
       color: #087f3e;
+      margin: 5px 0;
       font-size: 21px;
     }
 
@@ -151,16 +154,6 @@
       font-size: 60px;
     }
 
-    .candidate-number {
-      display: inline-block;
-      background: #087f3e;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
     footer {
       text-align: center;
       padding: 25px;
@@ -173,12 +166,6 @@
 <body>
 
 <header>
-
-  <!--
-    Jika kamu punya logo MAN Blora:
-    upload file bernama logo-manblora.png
-    ke repository yang sama dengan index.html.
-  -->
 
   <img
     src="logo-manblora.png"
@@ -197,9 +184,7 @@
 
 <div class="container">
 
-  <!-- =========================
-       LOGIN
-       ========================= -->
+  <!-- LOGIN -->
 
   <div class="card" id="loginCard">
 
@@ -216,7 +201,7 @@
       autocomplete="off"
     >
 
-    <button onclick="login()">
+    <button id="loginButton" onclick="login()">
       MASUK & MEMILIH
     </button>
 
@@ -225,9 +210,7 @@
   </div>
 
 
-  <!-- =========================
-       PEMILIHAN
-       ========================= -->
+  <!-- PEMILIHAN -->
 
   <div class="card hidden" id="voteCard">
 
@@ -238,17 +221,14 @@
       style="text-align:center;font-weight:bold;"
     ></p>
 
-    <!-- PASLON 1 -->
 
     <div class="paslon">
 
-      <span class="candidate-number">PASLON 01</span>
+      <strong>PASLON 01</strong>
 
       <h3>PRADIPTA & TIO</h3>
 
-      <p>
-        Pasangan Calon Ketua & Wakil Ketua OSIS
-      </p>
+      <p>Pasangan Calon Ketua & Wakil Ketua OSIS</p>
 
       <button onclick="pilihPaslon(1)">
         PILIH PASLON 01
@@ -257,17 +237,13 @@
     </div>
 
 
-    <!-- PASLON 2 -->
-
     <div class="paslon">
 
-      <span class="candidate-number">PASLON 02</span>
+      <strong>PASLON 02</strong>
 
       <h3>KEYLA & ARSYAD</h3>
 
-      <p>
-        Pasangan Calon Ketua & Wakil Ketua OSIS
-      </p>
+      <p>Pasangan Calon Ketua & Wakil Ketua OSIS</p>
 
       <button onclick="pilihPaslon(2)">
         PILIH PASLON 02
@@ -276,17 +252,13 @@
     </div>
 
 
-    <!-- PASLON 3 -->
-
     <div class="paslon">
 
-      <span class="candidate-number">PASLON 03</span>
+      <strong>PASLON 03</strong>
 
       <h3>NIKISA & JENIE</h3>
 
-      <p>
-        Pasangan Calon Ketua & Wakil Ketua OSIS
-      </p>
+      <p>Pasangan Calon Ketua & Wakil Ketua OSIS</p>
 
       <button onclick="pilihPaslon(3)">
         PILIH PASLON 03
@@ -299,15 +271,11 @@
   </div>
 
 
-  <!-- =========================
-       BERHASIL
-       ========================= -->
+  <!-- BERHASIL -->
 
   <div class="card hidden" id="successCard">
 
-    <div class="success-icon">
-      ✅
-    </div>
+    <div class="success-icon">✅</div>
 
     <h2>SUARA BERHASIL DISIMPAN</h2>
 
@@ -338,16 +306,7 @@
 
 /*
 ========================================================
- KONFIGURASI SUPABASE
-========================================================
-
- PROJECT URL:
- https://sfahuouyitpokyocveen.supabase.co
-
- PUBLISHABLE KEY:
- key yang kamu berikan sebelumnya.
-
- JANGAN gunakan SECRET KEY.
+SUPABASE
 ========================================================
 */
 
@@ -358,12 +317,6 @@ const SUPABASE_KEY =
   "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj";
 
 
-/*
-========================================================
- MEMBUAT KONEKSI
-========================================================
-*/
-
 const supabaseClient =
   supabase.createClient(
     SUPABASE_URL,
@@ -371,31 +324,32 @@ const supabaseClient =
   );
 
 
-/*
-========================================================
- VARIABEL PEMILIH
-========================================================
-*/
-
 let nomorPemilih = null;
 
 
 /*
 ========================================================
- LOGIN
+LOGIN
 ========================================================
 */
 
 async function login() {
 
-  const nomorInput =
-    document.getElementById("nomorPeserta");
+  const nomor =
+    document
+      .getElementById("nomorPeserta")
+      .value
+      .trim();
 
   const message =
-    document.getElementById("loginMessage");
+    document.getElementById(
+      "loginMessage"
+    );
 
-  const nomor =
-    nomorInput.value.trim();
+  const button =
+    document.getElementById(
+      "loginButton"
+    );
 
 
   message.innerHTML = "";
@@ -412,6 +366,8 @@ async function login() {
     return;
   }
 
+
+  button.disabled = true;
 
   tampilkanPesan(
     message,
@@ -441,18 +397,18 @@ async function login() {
 
       tampilkanPesan(
         message,
-        "Database tidak dapat diakses. Periksa pengaturan RLS Supabase.",
+        "Gagal membaca database: " +
+        hasil.error.message,
         "error"
       );
+
+      button.disabled = false;
 
       return;
     }
 
 
-    const data = hasil.data;
-
-
-    if (!data) {
+    if (!hasil.data) {
 
       tampilkanPesan(
         message,
@@ -460,11 +416,15 @@ async function login() {
         "error"
       );
 
+      button.disabled = false;
+
       return;
     }
 
 
-    if (data.sudah_memilih === true) {
+    if (
+      hasil.data.sudah_memilih === true
+    ) {
 
       tampilkanPesan(
         message,
@@ -472,18 +432,21 @@ async function login() {
         "warning"
       );
 
+      button.disabled = false;
+
       return;
     }
 
 
     nomorPemilih =
-      data.nomor_peserta;
+      hasil.data.nomor_peserta;
 
 
     document
       .getElementById("namaPemilih")
       .textContent =
-      "Pemilih: " + data.nama;
+      "Pemilih: " +
+      hasil.data.nama;
 
 
     document
@@ -504,20 +467,25 @@ async function login() {
 
     tampilkanPesan(
       message,
-      "Terjadi kesalahan koneksi.",
+      "Terjadi kesalahan: " +
+      error.message,
       "error"
     );
+
+    button.disabled = false;
   }
 }
 
 
 /*
 ========================================================
- PILIH PASLON
+VOTING
 ========================================================
 */
 
-async function pilihPaslon(nomorPaslon) {
+async function pilihPaslon(
+  nomorPaslon
+) {
 
   if (!nomorPemilih) {
 
@@ -546,21 +514,14 @@ async function pilihPaslon(nomorPaslon) {
 
   const yakin =
     confirm(
-
       "Kamu memilih:\n\n" +
-
       "PASLON " +
       String(nomorPaslon).padStart(2, "0") +
-
       " — " +
       namaPaslon +
-
       "\n\n" +
-
       "Pastikan pilihan kamu sudah benar.\n\n" +
-
       "Lanjutkan?"
-
     );
 
 
@@ -575,6 +536,19 @@ async function pilihPaslon(nomorPaslon) {
     );
 
 
+  const buttons =
+    document.querySelectorAll(
+      ".paslon button"
+    );
+
+
+  buttons.forEach(
+    button => {
+      button.disabled = true;
+    }
+  );
+
+
   tampilkanPesan(
     message,
     "Menyimpan suara...",
@@ -586,26 +560,38 @@ async function pilihPaslon(nomorPaslon) {
 
     /*
     ================================================
-    1. SIMPAN SUARA
+    STEP 1
+    SIMPAN SUARA
     ================================================
     */
 
-    const suara =
+    const hasilSuara =
       await supabaseClient
         .from("suara")
         .insert({
           paslon: nomorPaslon
-        });
+        })
+        .select();
 
 
-    if (suara.error) {
+    if (hasilSuara.error) {
 
-      console.error(suara.error);
+      console.error(
+        "ERROR SUARA:",
+        hasilSuara.error
+      );
 
       tampilkanPesan(
         message,
-        "Suara gagal disimpan.",
+        "Suara gagal disimpan: " +
+        hasilSuara.error.message,
         "error"
+      );
+
+      buttons.forEach(
+        button => {
+          button.disabled = false;
+        }
       );
 
       return;
@@ -614,11 +600,12 @@ async function pilihPaslon(nomorPaslon) {
 
     /*
     ================================================
-    2. TANDAI SUDAH MEMILIH
+    STEP 2
+    UPDATE STATUS PEMILIH
     ================================================
     */
 
-    const pemilih =
+    const hasilPemilih =
       await supabaseClient
         .from("pemilih")
         .update({
@@ -630,14 +617,17 @@ async function pilihPaslon(nomorPaslon) {
         );
 
 
-    if (pemilih.error) {
+    if (hasilPemilih.error) {
 
-      console.error(pemilih.error);
+      console.error(
+        "ERROR PEMILIH:",
+        hasilPemilih.error
+      );
 
       tampilkanPesan(
         message,
-        "Status pemilih gagal diperbarui.",
-        "error"
+        "Suara sudah masuk, tetapi status pemilih gagal diperbarui. Hubungi admin.",
+        "warning"
       );
 
       return;
@@ -646,7 +636,8 @@ async function pilihPaslon(nomorPaslon) {
 
     /*
     ================================================
-    3. TAMPILKAN BERHASIL
+    STEP 3
+    BERHASIL
     ================================================
     */
 
@@ -668,8 +659,15 @@ async function pilihPaslon(nomorPaslon) {
 
     tampilkanPesan(
       message,
-      "Terjadi kesalahan saat menyimpan suara.",
+      "Terjadi kesalahan: " +
+      error.message,
       "error"
+    );
+
+    buttons.forEach(
+      button => {
+        button.disabled = false;
+      }
     );
   }
 }
@@ -677,7 +675,7 @@ async function pilihPaslon(nomorPaslon) {
 
 /*
 ========================================================
- TAMPILKAN PESAN
+PESAN
 ========================================================
 */
 
@@ -694,6 +692,26 @@ function tampilkanPesan(
     text +
     '</div>';
 }
+
+
+/*
+========================================================
+ENTER UNTUK LOGIN
+========================================================
+*/
+
+document
+  .getElementById("nomorPeserta")
+  .addEventListener(
+    "keydown",
+    function(event) {
+
+      if (event.key === "Enter") {
+        login();
+      }
+
+    }
+  );
 
 </script>
 
