@@ -11,7 +11,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         body {
@@ -19,11 +19,29 @@
             color: #172554;
         }
 
+        /* HEADER */
         header {
-            background: linear-gradient(135deg, #166534, #15803d);
+            background: linear-gradient(
+                135deg,
+                #064e3b,
+                #15803d,
+                #16a34a
+            );
+
             color: white;
             text-align: center;
             padding: 45px 20px;
+        }
+
+        .logo {
+            width: 125px;
+            height: 125px;
+            object-fit: contain;
+            background: white;
+            border-radius: 50%;
+            padding: 7px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         header h1 {
@@ -32,22 +50,24 @@
         }
 
         header p {
-            margin-top: 6px;
             font-size: 16px;
+            margin-top: 5px;
         }
 
+        /* CONTAINER */
         .container {
-            max-width: 1050px;
+            max-width: 1100px;
             margin: 30px auto;
             padding: 0 20px;
         }
 
+        /* BOX */
         .box {
             background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 28px;
+            border-radius: 18px;
             margin-bottom: 25px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
         }
 
         .box h2 {
@@ -55,12 +75,13 @@
             margin-bottom: 10px;
         }
 
+        /* LOGIN */
         input {
             width: 100%;
-            padding: 14px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
+            padding: 15px;
             margin: 15px 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
             font-size: 16px;
             outline: none;
         }
@@ -71,10 +92,10 @@
 
         button {
             border: none;
-            padding: 13px 20px;
-            border-radius: 8px;
             background: #15803d;
             color: white;
+            padding: 14px 22px;
+            border-radius: 9px;
             font-size: 16px;
             cursor: pointer;
             transition: 0.2s;
@@ -82,23 +103,37 @@
 
         button:hover {
             background: #166534;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
+        .login-button {
+            width: 100%;
+        }
+
+        /* INFO */
+        .info {
+            background: #ecfdf5;
+            border-left: 5px solid #16a34a;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        /* KANDIDAT */
         .candidates {
             display: grid;
-            grid-template-columns: repeat(
-                auto-fit,
-                minmax(270px, 1fr)
-            );
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns:
+                repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 25px;
+            margin-top: 25px;
         }
 
         .candidate {
             background: white;
-            border-radius: 16px;
             padding: 25px;
+            border-radius: 18px;
             text-align: center;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             border: 3px solid transparent;
@@ -107,20 +142,31 @@
 
         .candidate:hover {
             border-color: #22c55e;
-            transform: translateY(-3px);
+            transform: translateY(-4px);
         }
 
-        .number {
-            width: 110px;
-            height: 110px;
+        .candidate-number {
+            width: 120px;
+            height: 120px;
+
             margin: 0 auto 18px;
+
             border-radius: 50%;
-            background: #dcfce7;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #dcfce7,
+                    #bbf7d0
+                );
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             color: #166534;
-            font-size: 35px;
+
+            font-size: 38px;
             font-weight: bold;
         }
 
@@ -130,7 +176,7 @@
         }
 
         .candidate h3 {
-            font-size: 20px;
+            font-size: 21px;
             margin-bottom: 15px;
         }
 
@@ -144,27 +190,25 @@
             width: 100%;
         }
 
+        /* HIDDEN */
         .hidden {
             display: none;
         }
 
-        #loginMessage {
-            margin-top: 12px;
-        }
-
+        /* HASIL */
         .result-item {
-            margin: 22px 0;
+            margin: 25px 0;
         }
 
         .result-header {
             display: flex;
             justify-content: space-between;
             gap: 10px;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
         }
 
         .bar {
-            height: 27px;
+            height: 28px;
             background: #e2e8f0;
             border-radius: 20px;
             overflow: hidden;
@@ -172,40 +216,49 @@
 
         .bar-fill {
             height: 100%;
-            background: #16a34a;
+            background: linear-gradient(
+                90deg,
+                #15803d,
+                #22c55e
+            );
+
             color: white;
             text-align: right;
-            padding-right: 8px;
-            line-height: 27px;
-            min-width: 0;
+            padding-right: 10px;
+            line-height: 28px;
+            transition: width 0.5s;
         }
 
+        /* RESET */
         .reset-button {
             background: #dc2626;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .reset-button:hover {
             background: #b91c1c;
         }
 
-        .info {
-            background: #ecfdf5;
-            border-left: 5px solid #16a34a;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 8px;
-        }
-
+        /* FOOTER */
         footer {
             text-align: center;
-            padding: 30px 20px;
+            padding: 35px 20px;
             color: #64748b;
         }
 
+        /* MOBILE */
         @media (max-width: 600px) {
+
+            header {
+                padding: 35px 15px;
+            }
+
             header h1 {
-                font-size: 24px;
+                font-size: 23px;
+            }
+
+            header p {
+                font-size: 14px;
             }
 
             .container {
@@ -219,60 +272,119 @@
             .result-header {
                 flex-direction: column;
             }
+
+            .candidate-number {
+                width: 100px;
+                height: 100px;
+                font-size: 32px;
+            }
         }
     </style>
 </head>
 
+
 <body>
 
+    <!-- ============================= -->
     <!-- HEADER -->
+    <!-- ============================= -->
+
     <header>
-        <h1>🗳️ E-VOTING OSIS MAN BLORA</h1>
-        <p>Pemilihan Ketua dan Wakil Ketua OSIS</p>
-        <p>Tahun Pelajaran 2026/2027</p>
+
+        <!--
+            Upload logo MAN Blora ke repository
+            dengan nama:
+            logo-manblora.png
+        -->
+
+        <img
+            src="logo-manblora.png"
+            alt="Logo MAN Blora"
+            class="logo"
+        >
+
+        <h1>
+            🗳️ E-VOTING OSIS MAN BLORA
+        </h1>
+
+        <p>
+            Pemilihan Ketua dan Wakil Ketua OSIS
+        </p>
+
+        <p>
+            Tahun Pelajaran 2026/2027
+        </p>
+
     </header>
 
 
-    <div class="container">
+    <main class="container">
 
-        <!-- LOGIN -->
-        <div class="box" id="loginBox">
 
-            <h2>🔐 Login Pemilih</h2>
+        <!-- ============================= -->
+        <!-- LOGIN PEMILIH -->
+        <!-- ============================= -->
+
+        <section
+            class="box"
+            id="loginBox"
+        >
+
+            <h2>
+                🔐 Login Pemilih
+            </h2>
 
             <p>
-                Silakan masukkan nama atau nomor peserta
+                Masukkan nama atau nomor peserta
                 untuk mengikuti pemilihan OSIS.
             </p>
 
             <input
                 type="text"
                 id="voterName"
-                placeholder="Masukkan nama / nomor peserta"
+                placeholder="Nama / Nomor Peserta"
                 autocomplete="off"
             >
 
-            <button onclick="login()">
+            <button
+                class="login-button"
+                onclick="login()"
+            >
                 Masuk & Memilih
             </button>
 
             <p id="loginMessage"></p>
 
+
             <div class="info">
-                <strong>Perhatian:</strong><br>
-                Setiap pemilih hanya dapat memberikan
-                satu suara pada perangkat/browser ini.
+
+                <strong>Perhatian:</strong>
+
+                <br>
+
+                Pilih satu pasangan calon
+                dengan teliti sebelum memberikan suara.
+
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- BAGIAN PEMILIHAN -->
-        <div id="votingSection" class="hidden">
+
+        <!-- ============================= -->
+        <!-- PEMILIHAN -->
+        <!-- ============================= -->
+
+        <section
+            id="votingSection"
+            class="hidden"
+        >
 
             <div class="box">
 
-                <h2>🗳️ Pilih Pasangan Calon</h2>
+                <h2>
+                    🗳️ Pilih Pasangan Calon
+                </h2>
 
                 <p id="welcome"></p>
 
@@ -281,102 +393,120 @@
 
             <div class="candidates">
 
-                <!-- PASLON 1 -->
-                <div class="candidate">
 
-                    <div class="number">
+                <!-- PASLON 01 -->
+
+                <article class="candidate">
+
+                    <div class="candidate-number">
                         01
                     </div>
 
-                    <h2>Paslon 01</h2>
+                    <h2>
+                        PASLON 01
+                    </h2>
 
                     <h3>
                         PRADIPTA & TIO
                     </h3>
 
                     <p>
-                        Pasangan calon Ketua dan Wakil
-                        Ketua OSIS MAN Blora.
+                        Calon Ketua dan Wakil Ketua
+                        OSIS MAN Blora.
                     </p>
 
                     <button
                         class="vote-button"
                         onclick="vote(1)"
                     >
-                        Pilih Paslon 01
+                        PILIH PASLON 01
                     </button>
 
-                </div>
+                </article>
 
 
-                <!-- PASLON 2 -->
-                <div class="candidate">
 
-                    <div class="number">
+                <!-- PASLON 02 -->
+
+                <article class="candidate">
+
+                    <div class="candidate-number">
                         02
                     </div>
 
-                    <h2>Paslon 02</h2>
+                    <h2>
+                        PASLON 02
+                    </h2>
 
                     <h3>
                         KEYLA & ARSYAD
                     </h3>
 
                     <p>
-                        Pasangan calon Ketua dan Wakil
-                        Ketua OSIS MAN Blora.
+                        Calon Ketua dan Wakil Ketua
+                        OSIS MAN Blora.
                     </p>
 
                     <button
                         class="vote-button"
                         onclick="vote(2)"
                     >
-                        Pilih Paslon 02
+                        PILIH PASLON 02
                     </button>
 
-                </div>
+                </article>
 
 
-                <!-- PASLON 3 -->
-                <div class="candidate">
 
-                    <div class="number">
+                <!-- PASLON 03 -->
+
+                <article class="candidate">
+
+                    <div class="candidate-number">
                         03
                     </div>
 
-                    <h2>Paslon 03</h2>
+                    <h2>
+                        PASLON 03
+                    </h2>
 
                     <h3>
                         NIKISA & JENIE
                     </h3>
 
                     <p>
-                        Pasangan calon Ketua dan Wakil
-                        Ketua OSIS MAN Blora.
+                        Calon Ketua dan Wakil Ketua
+                        OSIS MAN Blora.
                     </p>
 
                     <button
                         class="vote-button"
                         onclick="vote(3)"
                     >
-                        Pilih Paslon 03
+                        PILIH PASLON 03
                     </button>
 
-                </div>
+                </article>
 
             </div>
 
-        </div>
+        </section>
 
 
-        <!-- HASIL -->
-        <div class="box">
 
-            <h2>📊 Hasil Perolehan Suara</h2>
+        <!-- ============================= -->
+        <!-- HASIL SUARA -->
+        <!-- ============================= -->
+
+        <section class="box">
+
+            <h2>
+                📊 Hasil Perolehan Suara
+            </h2>
 
             <p>
-                Hasil berikut merupakan data demo yang
-                tersimpan pada browser.
+                Hasil di bawah merupakan data demo
+                yang tersimpan pada browser.
             </p>
 
             <div id="results"></div>
@@ -385,15 +515,19 @@
                 class="reset-button"
                 onclick="resetVotes()"
             >
-                Reset Data Demo
+                🗑️ Reset Data Demo
             </button>
 
-        </div>
+        </section>
 
-    </div>
+    </main>
 
 
+
+    <!-- ============================= -->
     <!-- FOOTER -->
+    <!-- ============================= -->
+
     <footer>
 
         <p>
@@ -401,49 +535,56 @@
         </p>
 
         <p>
-            Sistem pemilihan OSIS berbasis web
+            Sistem Pemilihan OSIS Berbasis Web
         </p>
 
     </footer>
 
 
-    <script>
 
-        /*
-         * =========================================
-         * DATA VOTING
-         * =========================================
-         */
+    <!-- ============================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================= -->
+
+    <script>
 
         let currentVoter = "";
 
+
+        /* =============================
+           DATA SUARA
+        ============================= */
 
         function getVotes() {
 
             return JSON.parse(
                 localStorage.getItem("osisVotes")
             ) || {
+
                 1: 0,
                 2: 0,
                 3: 0
+
             };
 
         }
 
 
-        /*
-         * =========================================
-         * LOGIN PEMILIH
-         * =========================================
-         */
+
+        /* =============================
+           LOGIN
+        ============================= */
 
         function login() {
 
             const input =
-                document.getElementById("voterName");
+                document.getElementById(
+                    "voterName"
+                );
 
             const name =
                 input.value.trim();
+
 
             const message =
                 document.getElementById(
@@ -455,10 +596,12 @@
 
                 message.innerHTML =
                     "<span style='color:#dc2626'>" +
-                    "Nama atau nomor peserta harus diisi." +
+                    "Nama atau nomor peserta " +
+                    "harus diisi." +
                     "</span>";
 
                 return;
+
             }
 
 
@@ -478,10 +621,12 @@
 
                 message.innerHTML =
                     "<span style='color:#dc2626'>" +
-                    "Pemilih ini sudah memberikan suara." +
+                    "Pemilih ini sudah " +
+                    "memberikan suara." +
                     "</span>";
 
                 return;
+
             }
 
 
@@ -489,32 +634,40 @@
 
 
             document
-                .getElementById("loginBox")
-                .classList.add("hidden");
+                .getElementById(
+                    "loginBox"
+                )
+                .classList
+                .add("hidden");
 
 
             document
-                .getElementById("votingSection")
-                .classList.remove("hidden");
+                .getElementById(
+                    "votingSection"
+                )
+                .classList
+                .remove("hidden");
 
 
             document
-                .getElementById("welcome")
+                .getElementById(
+                    "welcome"
+                )
                 .innerText =
-                "Selamat datang, " +
-                name +
-                ". Silakan pilih salah satu paslon.";
+                    "Selamat datang, " +
+                    name +
+                    ". Silakan pilih salah satu paslon.";
 
         }
 
 
-        /*
-         * =========================================
-         * MEMBERIKAN SUARA
-         * =========================================
-         */
+
+        /* =============================
+           VOTING
+        ============================= */
 
         function vote(candidate) {
+
 
             const names = {
 
@@ -532,80 +685,104 @@
 
             const confirmation =
                 confirm(
-                    "Apakah kamu yakin memilih " +
+
+                    "Apakah kamu yakin memilih:\n\n" +
                     names[candidate] +
-                    "?"
+                    "\n\n" +
+                    "Pilihan tidak dapat dibatalkan."
+
                 );
 
 
             if (!confirmation) {
+
                 return;
+
             }
 
 
-            let votes = getVotes();
+            let votes =
+                getVotes();
 
 
             votes[candidate]++;
 
 
             localStorage.setItem(
+
                 "osisVotes",
+
                 JSON.stringify(votes)
+
             );
 
 
-            /*
-             * Menyimpan daftar pemilih
-             * yang sudah memberikan suara
-             */
-
             let votedUsers =
                 JSON.parse(
+
                     localStorage.getItem(
                         "votedUsers"
                     )
+
                 ) || [];
 
 
             votedUsers.push(
+
                 currentVoter.toLowerCase()
+
             );
 
 
             localStorage.setItem(
+
                 "votedUsers",
+
                 JSON.stringify(votedUsers)
+
             );
 
 
             alert(
-                "Terima kasih!\n\n" +
-                "Suara kamu berhasil disimpan."
+
+                "✅ Suara berhasil disimpan!\n\n" +
+                "Terima kasih telah mengikuti " +
+                "pemilihan OSIS MAN Blora."
+
             );
 
 
             document
-                .getElementById("votingSection")
-                .classList.add("hidden");
+                .getElementById(
+                    "votingSection"
+                )
+                .classList
+                .add("hidden");
 
 
             document
-                .getElementById("loginBox")
-                .classList.remove("hidden");
+                .getElementById(
+                    "loginBox"
+                )
+                .classList
+                .remove("hidden");
 
 
             document
-                .getElementById("voterName")
+                .getElementById(
+                    "voterName"
+                )
                 .value = "";
 
 
             document
-                .getElementById("loginMessage")
+                .getElementById(
+                    "loginMessage"
+                )
                 .innerHTML =
-                "<span style='color:#16a34a'>" +
-                "Suara berhasil dicatat." +
-                "</span>";
+                    "<span style='color:#16a34a'>" +
+                    "Suara berhasil dicatat." +
+                    "</span>";
 
 
             showResults();
@@ -613,18 +790,20 @@
         }
 
 
-        /*
-         * =========================================
-         * MENAMPILKAN HASIL
-         * =========================================
-         */
+
+        /* =============================
+           HASIL SUARA
+        ============================= */
 
         function showResults() {
 
-            const votes = getVotes();
+
+            const votes =
+                getVotes();
 
 
             const total =
+
                 votes[1] +
                 votes[2] +
                 votes[3];
@@ -653,11 +832,18 @@
                 i++
             ) {
 
+
                 const percentage =
+
                     total === 0
+
                     ? 0
+
                     : Math.round(
-                        (votes[i] / total) * 100
+
+                        (votes[i] / total) *
+                        100
+
                     );
 
 
@@ -672,7 +858,8 @@
                             </strong>
 
                             <span>
-                                ${votes[i]} suara
+                                ${votes[i]}
+                                suara
                                 (${percentage}%)
                             </span>
 
@@ -683,7 +870,8 @@
                             <div
                                 class="bar-fill"
                                 style="
-                                    width:${percentage}%
+                                    width:
+                                    ${percentage}%
                                 "
                             >
                                 ${percentage}%
@@ -699,35 +887,42 @@
 
 
             document
-                .getElementById("results")
+                .getElementById(
+                    "results"
+                )
                 .innerHTML = html;
 
         }
 
 
-        /*
-         * =========================================
-         * RESET DATA DEMO
-         * =========================================
-         */
+
+        /* =============================
+           RESET DEMO
+        ============================= */
 
         function resetVotes() {
 
+
             const confirmation =
                 confirm(
+
                     "Apakah kamu yakin ingin " +
-                    "menghapus semua data demo?"
+                    "menghapus seluruh data demo?"
+
                 );
 
 
             if (!confirmation) {
+
                 return;
+
             }
 
 
             localStorage.removeItem(
                 "osisVotes"
             );
+
 
             localStorage.removeItem(
                 "votedUsers"
@@ -744,9 +939,10 @@
         }
 
 
-        /*
-         * Tampilkan hasil saat halaman dibuka
-         */
+
+        /* =============================
+           JALANKAN SAAT HALAMAN DIBUKA
+        ============================= */
 
         showResults();
 
