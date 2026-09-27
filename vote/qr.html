@@ -1,0 +1,209 @@
+<!DOCTYPE html> <html lang="id"> <head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>QR Code E-Voting MAN Blora</title>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(
+            135deg,
+            #ecfdf5,
+            #f0fdfa
+        );
+        color: #0f172a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        padding: 35px;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0 20px 50px rgba(15, 23, 42, .12);
+    }
+
+    .logo {
+        width: 90px;
+        height: 90px;
+        object-fit: contain;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        margin: 5px 0;
+        color: #0f766e;
+    }
+
+    h2 {
+        margin-top: 0;
+        font-weight: normal;
+        color: #475569;
+        font-size: 18px;
+    }
+
+    .qr-container {
+        margin: 30px auto;
+        width: 300px;
+        min-height: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+        padding: 15px;
+        border: 2px solid #ccfbf1;
+        border-radius: 15px;
+    }
+
+    #qrcode img,
+    #qrcode canvas {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .url {
+        background: #f8fafc;
+        padding: 12px;
+        border-radius: 10px;
+        word-break: break-all;
+        font-size: 14px;
+        color: #475569;
+        margin-bottom: 20px;
+    }
+
+    button {
+        border: 0;
+        padding: 13px 20px;
+        border-radius: 10px;
+        background: #0f766e;
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 5px;
+    }
+
+    button:hover {
+        background: #115e59;
+    }
+
+    .back {
+        background: #e2e8f0;
+        color: #0f172a;
+    }
+
+    .info {
+        margin-top: 20px;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    @media print {
+
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .card {
+            box-shadow: none;
+            max-width: 100%;
+        }
+
+        .buttons,
+        .info {
+            display: none;
+        }
+
+    }
+
+</style>
+
+</head> <body> <div class="card">
+<img
+    src="logo-manblora.png"
+    alt="Logo MAN Blora"
+    class="logo"
+>
+
+
+<h1>
+    E-VOTING MAN BLORA
+</h1>
+
+
+<h2>
+    Scan untuk melakukan voting
+</h2>
+
+
+<div class="qr-container">
+
+    <div id="qrcode"></div>
+
+</div>
+
+
+<div class="url">
+
+    https://sy7kjh7pwj-stack.github.io/E-VOTING-MAN-BLORA/vote/
+
+</div>
+
+
+<div class="buttons">
+
+    <button
+        onclick="downloadQR()"
+    >
+        📥 Download QR
+    </button>
+
+
+    <button
+        onclick="window.print()"
+    >
+        🖨️ Cetak QR
+    </button>
+
+
+    <button
+        class="back"
+        onclick="location.href='admin/'"
+    >
+        ← Admin
+    </button>
+
+</div>
+
+
+<div class="info">
+
+    Arahkan kamera HP ke QR Code.
+    Setelah halaman voting terbuka,
+    siswa dapat memasukkan NISN/NIS
+    untuk melanjutkan proses pemilihan.
+
+</div>
+
+</div> <script> const votingURL = "https://sy7kjh7pwj-stack.github.io/E-VOTING-MAN-BLORA/vote/"; const qr = new QRCode( document.getElementById( "qrcode" ), { text: votingURL, width: 260, height: 260, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H } ); function downloadQR() { const canvas = document.querySelector( "#qrcode canvas" ); if (!canvas) { alert( "QR Code belum selesai dibuat." ); return; } const link = document.createElement( "a" ); link.download = "QR-EVOTING-MAN-BLORA.png"; link.href = canvas.toDataURL( "image/png" ); link.click(); } </script> </body> </html>
