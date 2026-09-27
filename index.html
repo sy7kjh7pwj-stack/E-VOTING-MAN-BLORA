@@ -1,144 +1,46 @@
-<!DOCTYPE html> <html lang="id"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>E-Voting MAN Blora</title>
+<!DOCTYPE html> <html lang="id"> <head> <meta charset="UTF-8">
 
-<link rel="stylesheet" href="css/style.css">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<title>Voting - MAN Blora</title> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <style> * { box-sizing: border-box; } body { margin: 0; font-family: Arial, sans-serif; background: #f0fdfa; color: #0f172a; } header { background: #0f766e; color: white; padding: 20px; } .header { max-width: 900px; margin: auto; display: flex; align-items: center; gap: 15px; } .header img { width: 55px; height: 55px; object-fit: contain; } .header h2 { margin: 0; } .header span { font-size: 13px; } .container { max-width: 900px; margin: auto; padding: 30px 20px; } .card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 5px 20px rgba(0,0,0,.07); margin-bottom: 20px; } h1 { margin-top: 0; } label { display: block; font-weight: bold; margin-bottom: 8px; } input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 17px; } button { border: 0; border-radius: 8px; padding: 14px 20px; font-weight: bold; cursor: pointer; } .btn { background: #0f766e; color: white; width: 100%; margin-top: 15px; } .btn:disabled { background: #94a3b8; } .error { color: #dc2626; margin-top: 15px; font-weight: bold; } .success { color: #047857; margin-top: 15px; font-weight: bold; } .hidden { display: none; } .data { background: #f0fdfa; padding: 15px; border-radius: 10px; margin-top: 20px; } .data p { margin: 8px 0; } .candidate { border: 2px solid #e2e8f0; border-radius: 14px; padding: 20px; margin-top: 15px; cursor: pointer; } .candidate:hover { border-color: #0f766e; } .candidate.selected { border-color: #0f766e; background: #ecfdf5; } .candidate img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; display: block; margin-bottom: 12px; } .candidate h3 { margin: 5px 0; color: #0f766e; } .vote-button { background: #0f766e; color: white; width: 100%; margin-top: 20px; } .notice { background: #fff7ed; color: #9a3412; padding: 15px; border-radius: 10px; margin-top: 15px; } </style> </head> <body> <header> <div class="header">
 
-</head> <body> <header class="navbar"> <div class="brand">
-    <img src="logo-manblora.png" alt="Logo MAN Blora">
+<img
+src="../logo-manblora.png"
+alt="Logo MAN Blora"
 
-    <div>
-        <h2>MAN BLORA</h2>
-        <span>E-VOTING PEMILOS</span>
-    </div>
+<div> <h2>MAN BLORA</h2>
+
+<span>E-VOTING PEMILOS</span>
+
+</div> </div> </header> <main class="container"> <!-- VERIFIKASI --> <div class="card" id="loginCard" > <h1>🗳️ E-Voting PEMILOS</h1> <p> Masukkan NISN/NIS untuk melakukan verifikasi. </p> <label for="nis"> NISN / NIS </label>
+
+<input
+id="nis"
+type="text"
+inputmode="numeric"
+autocomplete="off"
+placeholder="Masukkan NISN/NIS"
+
+<button
+class="btn"
+id="cekButton"
+
+CEK DATA PEMILIH
+</button>
+
+<div id="error" class="error" ></div> </div> <!-- DATA PEMILIH --> <div class="card hidden" id="votingCard" > <h1>Data Pemilih</h1> <div class="data"> <p> <strong>NISN/NIS:</strong> <span id="showNis"></span> </p> <p> <strong>Nama:</strong> <span id="showName"></span> </p> <p> <strong>Kelas:</strong> <span id="showClass"></span> </p> </div> <div id="sudahMemilih" class="notice hidden" > ⚠️ Pemilih ini sudah menggunakan hak suara. </div> <h2> Pilih Kandidat </h2> <div id="candidateList">
+
+Memuat kandidat...
 
 </div>
 
-</header> <main>
-<section class="hero">
+<button
+class="vote-button"
+id="voteButton"
 
-    <div class="hero-content">
+KIRIM SUARA
+</button>
 
-        <div class="badge">
-            PEMILOS MAN BLORA
-        </div>
-
-        <h1>
-            E-Voting<br>
-            MAN Blora
-        </h1>
-
-        <p>
-            Sistem pemilihan Ketua dan Wakil OSIS
-            MAN Blora secara digital, mudah dan cepat.
-        </p>
-
-        <a href="vote/" class="btn-primary">
-            🗳️ MULAI VOTING
-        </a>
-
-    </div>
-
-
-    <div class="hero-logo">
-
-        <img
-            src="logo-manblora.png"
-            alt="Logo MAN Blora"
-        >
-
-    </div>
-
-</section>
-
-
-<section class="qr-section">
-
-    <div class="qr-card">
-
-        <h2>📱 Scan QR Code</h2>
-
-        <p>
-            Scan QR Code berikut menggunakan kamera HP
-            untuk membuka halaman voting.
-        </p>
-
-        <div id="qrcode"></div>
-
-        <p
-            class="qr-link"
-            id="voteUrl"
-        ></p>
-
-        <button
-            class="btn-secondary"
-            onclick="copyLink()"
-        >
-            📋 Salin Link Voting
-        </button>
-
-    </div>
-
-</section>
-
-
-<section class="steps">
-
-    <div class="step">
-
-        <span>1</span>
-
-        <h3>Scan QR</h3>
-
-        <p>
-            Scan QR Code PEMILOS.
-        </p>
-
-    </div>
-
-
-    <div class="step">
-
-        <span>2</span>
-
-        <h3>Verifikasi</h3>
-
-        <p>
-            Masukkan NIS/NISN.
-        </p>
-
-    </div>
-
-
-    <div class="step">
-
-        <span>3</span>
-
-        <h3>Pilih</h3>
-
-        <p>
-            Pilih kandidatmu.
-        </p>
-
-    </div>
-
-
-    <div class="step">
-
-        <span>4</span>
-
-        <h3>Konfirmasi</h3>
-
-        <p>
-            Kirim suara.
-        </p>
-
-    </div>
-
-</section>
-
-</main> <footer>
-© 2026 MAN Blora — E-Voting PEMILOS
-
-</footer> <script> const voteURL = window.location.origin + "/E-VOTING-MAN-BLORA/vote/"; document.getElementById("voteUrl").textContent = voteURL; new QRCode( document.getElementById("qrcode"), { text: voteURL, width: 240, height: 240, colorDark: "#0f172a", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H } ); function copyLink() { navigator.clipboard.writeText(voteURL) .then(() => { alert("Link voting berhasil disalin."); }) .catch(() => { alert("Gagal menyalin link."); }); } </script> </body> </html>
+<div id="voteMessage" class="success" ></div> </div> </main> <script> /* ========================= SUPABASE ========================= */ const SUPABASE_URL = "https://sfahuouyitpokyocveen.supabase.co"; const SUPABASE_KEY = "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj"; const db = window.supabase.createClient( SUPABASE_URL, SUPABASE_KEY ); /* ========================= VARIABLE ========================= */ let currentVoter = null; let selectedCandidate = null; /* ========================= CEK PEMILIH ========================= */ document .getElementById("cekButton") .addEventListener( "click", cekPemilih ); async function cekPemilih() { const nis = document .getElementById("nis") .value .trim(); const error = document.getElementById( "error" ); error.textContent = ""; if (!nis) { error.textContent = "Masukkan NISN/NIS terlebih dahulu."; return; } const button = document.getElementById( "cekButton" ); button.disabled = true; button.textContent = "MEMERIKSA..."; const result = await db .from("voters") .select( "id,nis,name,class,sudah_memilih" ) .eq( "nis", nis ) .maybeSingle(); button.disabled = false; button.textContent = "CEK DATA PEMILIH"; if (result.error) { error.textContent = "Terjadi kesalahan: " + result.error.message; return; } if (!result.data) { error.textContent = "❌ NISN/NIS tidak terdaftar."; return; } currentVoter = result.data; document .getElementById("showNis") .textContent = result.data.nis; document .getElementById("showName") .textContent = result.data.name; document .getElementById("showClass") .textContent = result.data.class; document .getElementById("loginCard") .classList .add("hidden"); document .getElementById("votingCard") .classList .remove("hidden"); if (result.data.sudah_memilih) { document .getElementById("sudahMemilih") .classList .remove("hidden"); document .getElementById("voteButton") .disabled = true; } await loadCandidates(); } /* ========================= LOAD KANDIDAT ========================= */ async function loadCandidates() { const list = document.getElementById( "candidateList" ); const result = await db .from("candidates") .select( "id,number,name,photo,vision,mission" ) .order( "number", { ascending: true } ); if (result.error) { list.innerHTML = "Gagal mengambil kandidat: " + result.error.message; return; } list.innerHTML = ""; result.data.forEach( function(candidate) { const div = document.createElement( "div" ); div.className = "candidate"; div.onclick = function() { selectCandidate( candidate.id, div ); }; let photo = ""; if (candidate.photo) { photo = ` <img src="${escapeHTML(candidate.photo)}" alt="Foto kandidat" > `; } div.innerHTML = ` ${photo} <h3> Nomor ${candidate.number} </h3> <strong> ${escapeHTML(candidate.name)} </strong> <p> <b>Visi:</b><br> ${escapeHTML(candidate.vision || "-")} </p> <p> <b>Misi:</b><br> ${escapeHTML(candidate.mission || "-")} </p> `; list.appendChild(div); } ); } /* ========================= PILIH KANDIDAT ========================= */ function selectCandidate( id, element ) { selectedCandidate = id; document .querySelectorAll( ".candidate" ) .forEach( function(item) { item.classList .remove("selected"); } ); element.classList .add("selected"); } /* ========================= KIRIM SUARA ========================= */ document .getElementById("voteButton") .addEventListener( "click", kirimSuara ); async function kirimSuara() { if (!currentVoter) { return; } if (!selectedCandidate) { alert( "Silakan pilih kandidat terlebih dahulu." ); return; } if (currentVoter.sudah_memilih) { alert( "Pemilih ini sudah memilih." ); return; } const yakin = confirm( "Yakin dengan pilihan Anda?" ); if (!yakin) { return; } const button = document.getElementById( "voteButton" ); button.disabled = true; button.textContent = "MENGIRIM SUARA..."; const vote = await db .from("votes") .insert({ voter_id: currentVoter.id, candidate_id: selectedCandidate }); if (vote.error) { button.disabled = false; button.textContent = "KIRIM SUARA"; alert( "Gagal mengirim suara: " + vote.error.message ); return; } const update = await db .from("voters") .update({ sudah_memilih: true }) .eq( "id", currentVoter.id ); if (update.error) { alert( "Suara tersimpan, tetapi status pemilih gagal diperbarui." ); return; } document .getElementById( "voteMessage" ) .textContent = "✅ Suara berhasil dikirim. Terima kasih telah menggunakan hak suara."; document .getElementById( "voteButton" ) .style.display = "none"; document .getElementById( "candidateList" ) .style.display = "none"; } /* ========================= ESCAPE ========================= */ function escapeHTML(value) { return String( value ?? "" ) .replace( /&/g, "&amp;" ) .replace( /</g, "&lt;" ) .replace( />/g, "&gt;" ) .replace( /"/g, "&quot;" ) .replace( /'/g, "&#039;" ); } </script> </body> </html>
