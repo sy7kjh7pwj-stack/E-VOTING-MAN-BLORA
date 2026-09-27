@@ -1,61 +1,42 @@
-<!DOCTYPE html> <html lang="id"> <head> <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-
-<title>Kelola Pemilih - MAN Blora</title> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <style> * { box-sizing: border-box; } body { margin: 0; font-family: Arial, sans-serif; background: #f0fdfa; color: #0f172a; } .header { background: #0f766e; color: white; padding: 18px 20px; } .header-inner { max-width: 1100px; margin: auto; display: flex; justify-content: space-between; align-items: center; gap: 15px; } .logo-area h2 { margin: 0 0 4px; } .logo-area span { font-size: 13px; } .back-btn { color: #0f172a; background: white; text-decoration: none; padding: 11px 16px; border-radius: 9px; font-weight: bold; } .container { max-width: 1100px; margin: auto; padding: 35px 20px 70px; } .page-title { margin-bottom: 25px; } .page-title h1 { margin: 0 0 8px; } .page-title p { margin: 0; color: #64748b; } .card { background: white; border-radius: 18px; padding: 25px; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(15,23,42,.06); } .card h2 { margin-top: 0; } .info { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; padding: 15px; border-radius: 10px; margin-bottom: 25px; line-height: 1.6; } .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; } .form-group label { display: block; margin-bottom: 7px; font-weight: bold; } .form-group input { width: 100%; padding: 13px; border: 1px solid #cbd5e1; border-radius: 9px; font-size: 15px; outline: none; } .form-group input:focus { border-color: #0f766e; } .save-btn { margin-top: 18px; border: 0; background: #0f766e; color: white; padding: 13px 22px; border-radius: 9px; font-weight: bold; cursor: pointer; } .save-btn:disabled { opacity: .6; cursor: not-allowed; } .message { margin-top: 15px; font-weight: bold; } .search { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 9px; font-size: 15px; margin-bottom: 15px; } .count { color: #64748b; margin-bottom: 15px; } .table-wrapper { overflow-x: auto; } table { width: 100%; min-width: 750px; border-collapse: collapse; } th, td { padding: 14px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; } th { background: #f8fafc; } .status { display: inline-block; padding: 6px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; } .status-belum { background: #fef3c7; color: #92400e; } .status-sudah { background: #dcfce7; color: #166534; } .delete-btn { border: 0; background: #fee2e2; color: #991b1b; padding: 8px 11px; border-radius: 7px; cursor: pointer; font-weight: bold; } .empty { text-align: center; color: #64748b; padding: 30px; } .error { text-align: center; color: #dc2626; padding: 25px; } @media (max-width: 750px) { .header-inner { flex-direction: column; align-items: flex-start; } .form-grid { grid-template-columns: 1fr; } .back-btn { width: 100%; text-align: center; } } </style> </head> <body> <header class="header"> <div class="header-inner"> <div class="logo-area"> <h2>MAN BLORA</h2> <span> ADMIN E-VOTING </span> </div>
-
-<a
-href="./"
-class="back-btn"
-
-← Dashboard
-</a>
-
-</div> </header> <main class="container"> <div class="page-title"> <h1> 👨‍🎓 Kelola Pemilih </h1> <p> Tambah dan kelola data pemilih. </p> </div> <div class="info">
-
-<strong>Informasi:</strong><br>
-
-Masukkan NISN/NIS, nama lengkap, dan kelas.
-Data akan disimpan ke database Supabase.
-
-</div> <!-- TAMBAH PEMILIH --> <section class="card"> <h2> ➕ Tambah Pemilih </h2> <form id="voterForm"> <div class="form-grid"> <div class="form-group"> <label> NISN / NIS </label>
+<!DOCTYPE html> <html lang="id"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Kelola Pemilih - E-Voting MAN Blora</title> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> <style> *{box-sizing:border-box} body{ margin:0; font-family:Arial,sans-serif; background:#f0fdfa; color:#0f172a; } header{ background:#0f766e; color:white; padding:20px; } .header{ max-width:1100px; margin:auto; display:flex; justify-content:space-between; align-items:center; } header h2{ margin:0 0 5px; } .back{ background:white; color:#0f766e; text-decoration:none; padding:10px 15px; border-radius:8px; font-weight:bold; } .container{ max-width:1100px; margin:auto; padding:30px 20px; } .card{ background:white; padding:25px; border-radius:15px; margin-bottom:25px; box-shadow:0 5px 20px rgba(0,0,0,.06); } .form-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; } label{ display:block; font-weight:bold; margin-bottom:7px; } input{ width:100%; padding:13px; border:1px solid #cbd5e1; border-radius:8px; font-size:16px; } input:focus{ outline:none; border-color:#0f766e; } button{ border:0; border-radius:8px; padding:12px 18px; cursor:pointer; font-weight:bold; } .save{ margin-top:18px; background:#0f766e; color:white; } .delete{ background:#fee2e2; color:#991b1b; } .message{ margin-top:15px; font-weight:bold; } .search{ margin-bottom:15px; } table{ width:100%; border-collapse:collapse; } th,td{ padding:12px 10px; border-bottom:1px solid #e2e8f0; text-align:left; } th{ background:#f8fafc; } .table-wrap{ overflow-x:auto; } .status{ padding:5px 9px; border-radius:20px; background:#fef3c7; color:#92400e; font-size:12px; font-weight:bold; } @media(max-width:750px){ .form-grid{ grid-template-columns:1fr; } .header{ flex-direction:column; align-items:flex-start; gap:15px; } } </style> </head> <body> <header> <div class="header"> <div> <h2>MAN BLORA</h2> <div>ADMIN E-VOTING</div> </div> <a class="back" href="../"> ← Beranda </a> </div> </header> <main class="container"> <div class="card"> <h1>👨‍🎓 Kelola Pemilih</h1> <p> Tambah data pemilih menggunakan NISN/NIS, nama, dan kelas. </p> </div> <div class="card"> <h2>➕ Tambah Pemilih</h2> <form id="voterForm"> <div class="form-grid"> <div> <label for="nis">NISN / NIS</label>
 
 <input
 id="nis"
 type="text"
 inputmode="numeric"
-placeholder="Contoh: 1234567890"
+autocomplete="off"
+placeholder="Masukkan NISN/NIS"
 required
 
-</div> <div class="form-group"> <label> Nama Lengkap </label>
+</div> <div> <label for="name">Nama Lengkap</label>
 
 <input
 id="name"
 type="text"
-placeholder="Contoh: Ahmad Fauzan"
+autocomplete="off"
+placeholder="Masukkan nama"
 required
 
-</div> <div class="form-group"> <label> Kelas </label>
+</div> <div> <label for="className">Kelas</label>
 
 <input
 id="className"
 type="text"
+autocomplete="off"
 placeholder="Contoh: XII IPA 1"
 required
 
 </div> </div>
 
 <button
-id="saveButton"
-class="save-btn"
 type="submit"
+class="save"
+id="saveButton"
 
 SIMPAN PEMILIH
 </button>
 
-<div id="message" class="message" ></div> </form> </section> <!-- DAFTAR --> <section class="card"> <h2> 📋 Daftar Pemilih </h2>
+<div id="message" class="message" ></div> </form> </div> <div class="card"> <h2>📋 Daftar Pemilih</h2>
 
 <input
 id="search"
@@ -63,4 +44,4 @@ class="search"
 type="search"
 placeholder="🔎 Cari NISN/NIS, nama, atau kelas..."
 
-<div id="count" class="count" > Memuat data... </div> <div class="table-wrapper"> <table> <thead> <tr> <th> No </th> <th> NISN / NIS </th> <th> Nama </th> <th> Kelas </th> <th> Status </th> <th> Aksi </th> </tr> </thead> <tbody id="voterTable"> <tr> <td colspan="6" class="empty" > Memuat data... </td> </tr> </tbody> </table> </div> </section> </main> <script> /* ============================== SUPABASE ============================== */ const SUPABASE_URL = "https://sfahuouyitpokyocveen.supabase.co"; const SUPABASE_KEY = "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_KEY ); /* ============================== DATA ============================== */ let voters = []; /* ============================== LOAD DATA ============================== */ async function loadVoters() { const table = document.getElementById( "voterTable" ); const { data, error } = await supabaseClient .from("voters") .select( "id, nis, name, class" ) .order( "name", { ascending: true } ); if (error) { console.error(error); table.innerHTML = ` <tr> <td colspan="6" class="error" > Gagal mengambil data:<br> ${escapeHTML(error.message)} </td> </tr> `; return; } voters = data || []; renderVoters(); } /* ============================== RENDER ============================== */ function renderVoters() { const table = document.getElementById( "voterTable" ); const keyword = document .getElementById("search") .value .trim() .toLowerCase(); const filtered = voters.filter( function(voter) { const nis = String( voter.nis || "" ) .toLowerCase(); const name = String( voter.name || "" ) .toLowerCase(); const className = String( voter.class || "" ) .toLowerCase(); return ( nis.includes(keyword) || name.includes(keyword) || className.includes(keyword) ); } ); document .getElementById("count") .textContent = "Menampilkan " + filtered.length + " dari " + voters.length + " pemilih"; if ( filtered.length === 0 ) { table.innerHTML = ` <tr> <td colspan="6" class="empty" > Belum ada data pemilih. </td> </tr> `; return; } table.innerHTML = ""; filtered.forEach( function(voter, index) { const row = document.createElement( "tr" ); row.innerHTML = ` <td> ${index + 1} </td> <td> ${escapeHTML(voter.nis)} </td> <td> ${escapeHTML(voter.name)} </td> <td> ${escapeHTML(voter.class)} </td> <td> <span class="status status-belum" > Belum Voting </span> </td> <td> <button class="delete-btn" onclick="deleteVoter('${voter.id}')" > Hapus </button> </td> `; table.appendChild(row); } ); } /* ============================== TAMBAH PEMILIH ============================== */ document .getElementById("voterForm") .addEventListener( "submit", addVoter ); async function addVoter(event) { event.preventDefault(); const nis = document .getElementById("nis") .value .trim(); const name = document .getElementById("name") .value .trim(); const className = document .getElementById("className") .value .trim(); const message = document.getElementById( "message" ); const button = document.getElementById( "saveButton" ); if ( !nis || !name || !className ) { message.textContent = "NISN/NIS, nama, dan kelas wajib diisi."; message.style.color = "#dc2626"; return; } button.disabled = true; button.textContent = "MENYIMPAN..."; message.textContent = ""; const { error } = await supabaseClient .from("voters") .insert({ nis: nis, name: name, class: className }); if (error) { console.error(error); message.textContent = "Gagal menyimpan: " + error.message; message.style.color = "#dc2626"; button.disabled = false; button.textContent = "SIMPAN PEMILIH"; return; } message.textContent = "✓ Pemilih berhasil ditambahkan."; message.style.color = "#0f766e"; document .getElementById( "voterForm" ) .reset(); button.disabled = false; button.textContent = "SIMPAN PEMILIH"; await loadVoters(); } /* ============================== HAPUS ============================== */ async function deleteVoter(id) { const yakin = confirm( "Yakin ingin menghapus pemilih ini?" ); if (!yakin) { return; } const { error } = await supabaseClient .from("voters") .delete() .eq( "id", id ); if (error) { alert( "Gagal menghapus:\n" + error.message ); return; } await loadVoters(); } /* ============================== SEARCH ============================== */ document .getElementById("search") .addEventListener( "input", renderVoters ); /* ============================== ESCAPE ============================== */ function escapeHTML(value) { return String( value ?? "" ) .replace( /&/g, "&amp;" ) .replace( /</g, "&lt;" ) .replace( />/g, "&gt;" ) .replace( /"/g, "&quot;" ) .replace( /'/g, "&#039;" ); } /* ============================== MULAI ============================== */ loadVoters(); </script> </body> </html>
+<div class="table-wrap"> <table> <thead> <tr> <th>No</th> <th>NISN / NIS</th> <th>Nama</th> <th>Kelas</th> <th>Aksi</th> </tr> </thead> <tbody id="voterTable"> <tr> <td colspan="5"> Memuat data... </td> </tr> </tbody> </table> </div> </div> </main> <script> /* ========================= SUPABASE ========================= */ const SUPABASE_URL = "https://sfahuouyitpokyocveen.supabase.co"; const SUPABASE_KEY = "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj"; const db = window.supabase.createClient( SUPABASE_URL, SUPABASE_KEY ); /* ========================= DATA ========================= */ let voters = []; /* ========================= LOAD DATA ========================= */ async function loadVoters(){ const table = document.getElementById( "voterTable" ); const result = await db .from("voters") .select("id,nis,name,class") .order("name"); if(result.error){ table.innerHTML = ` <tr> <td colspan="5"> Gagal mengambil data: ${escapeHTML(result.error.message)} </td> </tr> `; return; } voters = result.data || []; render(); } /* ========================= RENDER ========================= */ function render(){ const keyword = document .getElementById("search") .value .toLowerCase() .trim(); const data = voters.filter(v => String(v.nis || "") .toLowerCase() .includes(keyword) || String(v.name || "") .toLowerCase() .includes(keyword) || String(v.class || "") .toLowerCase() .includes(keyword) ); const table = document.getElementById( "voterTable" ); if(data.length === 0){ table.innerHTML = ` <tr> <td colspan="5" style="text-align:center;padding:25px" > Belum ada pemilih. </td> </tr> `; return; } table.innerHTML = ""; data.forEach((v,index)=>{ const row = document.createElement("tr"); row.innerHTML = ` <td> ${index + 1} </td> <td> ${escapeHTML(v.nis)} </td> <td> ${escapeHTML(v.name)} </td> <td> ${escapeHTML(v.class)} </td> <td> <button class="delete" onclick="hapus('${v.id}')" > Hapus </button> </td> `; table.appendChild(row); }); } /* ========================= TAMBAH ========================= */ document .getElementById("voterForm") .addEventListener( "submit", async function(e){ e.preventDefault(); const nis = document .getElementById("nis") .value .trim(); const name = document .getElementById("name") .value .trim(); const className = document .getElementById("className") .value .trim(); const message = document.getElementById( "message" ); const button = document.getElementById( "saveButton" ); if( !nis || !name || !className ){ message.textContent = "Semua data wajib diisi."; message.style.color = "red"; return; } button.disabled = true; button.textContent = "MENYIMPAN..."; const result = await db .from("voters") .insert({ nis: nis, name: name, class: className }); if(result.error){ message.textContent = "Gagal menyimpan: " + result.error.message; message.style.color = "red"; button.disabled = false; button.textContent = "SIMPAN PEMILIH"; return; } message.textContent = "✓ Pemilih berhasil disimpan."; message.style.color = "#0f766e"; document .getElementById( "voterForm" ) .reset(); button.disabled = false; button.textContent = "SIMPAN PEMILIH"; await loadVoters(); } ); /* ========================= HAPUS ========================= */ async function hapus(id){ if( !confirm( "Yakin ingin menghapus pemilih ini?" ) ){ return; } const result = await db .from("voters") .delete() .eq("id",id); if(result.error){ alert( "Gagal menghapus: " + result.error.message ); return; } await loadVoters(); } /* ========================= SEARCH ========================= */ document .getElementById("search") .addEventListener( "input", render ); /* ========================= ESCAPE ========================= */ function escapeHTML(value){ return String( value ?? "" ) .replace(/&/g,"&amp;") .replace(/</g,"&lt;") .replace(/>/g,"&gt;") .replace(/"/g,"&quot;") .replace(/'/g,"&#039;"); } /* ========================= START ========================= */ loadVoters(); </script> </body> </html>
