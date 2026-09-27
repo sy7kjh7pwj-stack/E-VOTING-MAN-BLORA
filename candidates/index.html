@@ -1,0 +1,207 @@
+<!DOCTYPE html> <html lang="id"> <head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Pilih Kandidat - MAN Blora</title>
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+<style>
+
+    .candidate-container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 50px 20px 80px;
+    }
+
+    .candidate-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .candidate-header h1 {
+        font-size: 40px;
+        margin: 15px 0;
+    }
+
+    .candidate-header p {
+        color: #64748b;
+    }
+
+    .voter-name {
+        display: inline-block;
+        background: #ccfbf1;
+        color: #115e59;
+        padding: 8px 15px;
+        border-radius: 50px;
+        font-weight: bold;
+    }
+
+    .candidates {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .candidate {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+        border: 3px solid transparent;
+        transition: 0.2s;
+    }
+
+    .candidate:hover {
+        transform: translateY(-3px);
+    }
+
+    .candidate.selected {
+        border-color: #0f766e;
+        background: #f0fdfa;
+    }
+
+    .candidate-number {
+        display: inline-flex;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        background: #0f766e;
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .candidate-photo {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #e2e8f0;
+        margin-bottom: 15px;
+    }
+
+    .candidate h2 {
+        margin-bottom: 10px;
+    }
+
+    .candidate p {
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    .vision {
+        margin-top: 15px;
+        padding: 15px;
+        background: #f8fafc;
+        border-radius: 12px;
+        text-align: left;
+    }
+
+    .select-btn {
+        width: 100%;
+        margin-top: 20px;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: #0f766e;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .select-btn:hover {
+        background: #115e59;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 40px;
+        background: white;
+        border-radius: 20px;
+    }
+
+    @media (max-width: 700px) {
+
+        .candidates {
+            grid-template-columns: 1fr;
+        }
+
+        .candidate-header h1 {
+            font-size: 30px;
+        }
+
+    }
+
+</style>
+
+</head> <body> <header class="navbar">
+<div class="brand">
+
+    <img
+        src="../logo-manblora.png"
+        alt="Logo MAN Blora"
+    >
+
+    <div>
+
+        <h2>MAN BLORA</h2>
+
+        <span>E-VOTING PEMILOS</span>
+
+    </div>
+
+</div>
+
+</header> <main> <div class="candidate-container">
+<div class="candidate-header">
+
+    <div
+        class="voter-name"
+        id="voterName"
+    >
+        Memuat pemilih...
+    </div>
+
+    <h1>
+        Pilih Kandidat
+    </h1>
+
+    <p>
+        Pilih satu kandidat yang kamu kehendaki.
+    </p>
+
+</div>
+
+
+<div
+    class="candidates"
+    id="candidates"
+>
+
+    <div class="empty">
+        Memuat kandidat...
+    </div>
+
+</div>
+
+</div> </main> <footer>
+© 2026 MAN Blora — E-Voting PEMILOS
+
+</footer> <script> /* ======================================== SUPABASE ======================================== */ const SUPABASE_URL = "https://sfahuouyitpokyocveen.supabase.co"; const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY ); /* ======================================== CEK PEMILIH ======================================== */ const voterText = document.getElementById("voterName"); const candidatesElement = document.getElementById("candidates"); const voterData = sessionStorage.getItem("voter"); if (!voterData) { window.location.href = "../vote/"; } const voter = JSON.parse(voterData); voterText.textContent = "Pemilih: " + voter.name; /* ======================================== AMBIL KANDIDAT ======================================== */ async function loadCandidates() { const { data, error } = await supabaseClient .from("candidates") .select( "id, number, name, photo, vision, mission" ) .order( "number", { ascending: true } ); if (error) { console.error(error); candidatesElement.innerHTML = ` <div class="empty"> <h3> Kandidat belum tersedia </h3> <p> Admin belum memasukkan data kandidat. </p> </div> `; return; } if (!data || data.length === 0) { candidatesElement.innerHTML = ` <div class="empty"> <h3> Belum ada kandidat </h3> <p> Silakan tunggu admin menambahkan kandidat. </p> </div> `; return; } candidatesElement.innerHTML = ""; data.forEach( candidate => { const card = document.createElement("div"); card.className = "candidate"; const photo = candidate.photo || "../logo-manblora.png"; card.innerHTML = ` <div class="candidate-number"> ${candidate.number} </div> <br> <img class="candidate-photo" src="${photo}" alt="${candidate.name}" > <h2> ${candidate.name} </h2> <div class="vision"> <strong> Visi </strong> <p> ${candidate.vision || "-"} </p> </div> <div class="vision"> <strong> Misi </strong> <p> ${candidate.mission || "-"} </p> </div> <button class="select-btn" onclick="selectCandidate('${candidate.id}', '${escapeText(candidate.name)}')" > PILIH KANDIDAT </button> `; candidatesElement.appendChild(card); } ); } /* ======================================== PILIH KANDIDAT ======================================== */ function selectCandidate( candidateId, candidateName ) { const yakin = confirm( "Apakah kamu yakin memilih " + candidateName + "?\n\n" + "Pilihan yang sudah dikirim " + "tidak dapat diubah." ); if (!yakin) { return; } sessionStorage.setItem( "selectedCandidate", candidateId ); sessionStorage.setItem( "selectedCandidateName", candidateName ); window.location.href = "../confirm/"; } /* ======================================== AMAN UNTUK TEKS ======================================== */ function escapeText(text) { return String(text) .replace(/'/g, "\\'") .replace(/"/g, '\\"'); } loadCandidates(); </script> </body> </html>
