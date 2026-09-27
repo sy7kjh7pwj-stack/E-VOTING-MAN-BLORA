@@ -1,0 +1,1174 @@
+<!DOCTYPE html> <html lang="id"> <head> <meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Kelola Pemilih - E-Voting MAN Blora</title>
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+    .admin-container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 40px 20px 80px;
+    }
+
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .admin-header h1 {
+        margin: 10px 0;
+    }
+
+    .back-btn {
+        display: inline-block;
+        padding: 12px 18px;
+        border-radius: 10px;
+        background: #e2e8f0;
+        color: #0f172a;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .panel {
+        background: white;
+        padding: 25px;
+        border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(15,23,42,.06);
+        margin-bottom: 25px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: bold;
+    }
+
+    .form-group input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .form-group input:focus {
+        border-color: #0f766e;
+    }
+
+    .search-box {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 10px;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .submit-btn {
+        border: 0;
+        padding: 14px 22px;
+        border-radius: 10px;
+        background: #0f766e;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .submit-btn:disabled {
+        opacity: .6;
+        cursor: not-allowed;
+    }
+
+    .message {
+        margin-top: 15px;
+        font-weight: bold;
+    }
+
+    .info-box {
+        background: #f0fdfa;
+        border: 1px solid #99f6e4;
+        color: #115e59;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        line-height: 1.6;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 750px;
+    }
+
+    th {
+        background: #f8fafc;
+        color: #334155;
+        font-weight: bold;
+    }
+
+    th,
+    td {
+        padding: 14px 10px;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .status-voted {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .status-not-voted {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .reset-btn {
+        border: 0;
+        padding: 8px 11px;
+        border-radius: 8px;
+        background: #dbeafe;
+        color: #1e40af;
+        cursor: pointer;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    .delete-btn {
+        border: 0;
+        padding: 8px 11px;
+        border-radius: 8px;
+        background: #fee2e2;
+        color: #991b1b;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .count-box {
+        color: #64748b;
+        margin-bottom: 15px;
+    }
+
+    .loading {
+        text-align: center;
+        color: #64748b;
+        padding: 30px;
+    }
+
+    .empty {
+        text-align: center;
+        color: #64748b;
+        padding: 30px;
+    }
+
+    @media (max-width: 700px) {
+
+        .admin-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+
+        .back-btn {
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+    }
+
+</style>
+
+</head> <body> <header class="navbar">
+<div class="brand">
+
+    <img
+        src="../logo-manblora.png"
+        alt="Logo MAN Blora"
+    >
+
+    <div>
+
+        <h2>MAN BLORA</h2>
+
+        <span>ADMIN E-VOTING</span>
+
+    </div>
+
+</div>
+
+</header> <main> <div class="admin-container">
+<!-- HEADER -->
+
+<div class="admin-header">
+
+    <div>
+
+        <div class="badge">
+            ADMIN PANEL
+        </div>
+
+        <h1>
+            Kelola Pemilih
+        </h1>
+
+        <p style="color:#64748b;">
+            Tambah dan kelola data siswa yang memiliki hak pilih.
+        </p>
+
+    </div>
+
+    <a
+        href="dashboard.html"
+        class="back-btn"
+    >
+        ← Kembali ke Dashboard
+    </a>
+
+</div>
+
+<!-- INFO -->
+
+<div class="info-box">
+
+    <strong>Informasi:</strong><br>
+
+    Masukkan NISN/NIS, nama siswa, dan kelas.
+    Siswa menggunakan NISN/NIS tersebut untuk
+    masuk ke halaman voting.
+
+</div>
+
+<!-- FORM -->
+
+<div class="panel">
+
+    <h2>
+        ➕ Tambah Pemilih
+    </h2>
+
+    <br>
+
+    <form id="voterForm">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="nisn">
+                    NISN / NIS *
+                </label>
+
+                <input
+                    id="nisn"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    placeholder="Contoh: 1234567890"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="name">
+                    Nama Lengkap *
+                </label>
+
+                <input
+                    id="name"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Contoh: Ahmad Fauzan"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="className">
+                    Kelas
+                </label>
+
+                <input
+                    id="className"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Contoh: XII IPA 1"
+                >
+
+            </div>
+
+        </div>
+
+        <button
+            id="saveButton"
+            type="submit"
+            class="submit-btn"
+        >
+            SIMPAN PEMILIH
+        </button>
+
+    </form>
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+</div>
+
+<!-- DAFTAR -->
+
+<div class="panel">
+
+    <h2>
+        👨‍🎓 Daftar Pemilih
+    </h2>
+
+    <br>
+
+    <input
+        id="search"
+        class="search-box"
+        type="search"
+        placeholder="🔎 Cari NISN, nama, atau kelas..."
+    >
+
+    <div
+        id="countBox"
+        class="count-box"
+    >
+        Memuat data...
+    </div>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        No
+                    </th>
+
+                    <th>
+                        NISN / NIS
+                    </th>
+
+                    <th>
+                        Nama
+                    </th>
+
+                    <th>
+                        Kelas
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Aksi
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="voterTable">
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="loading"
+                    >
+                        Memuat data...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</div> </main> <footer>
+© 2026 MAN Blora — E-Voting PEMILOS
+
+</footer> <script>
+/* =====================================
+SUPABASE
+===================================== */
+
+const SUPABASE_URL =
+"https://sfahuouyitpokyocveen.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj";
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+/* =====================================
+VARIABEL
+===================================== */
+
+let voters = [];
+
+/* =====================================
+CEK LOGIN
+===================================== */
+
+async function checkLogin() {
+
+const {
+    data,
+    error
+} = await supabaseClient
+    .auth
+    .getSession();
+
+if (
+    error ||
+    !data ||
+    !data.session
+) {
+
+    window.location.href = "./";
+
+    return false;
+
+}
+
+return true;
+
+}
+
+/* =====================================
+LOAD DATA
+===================================== */
+
+async function loadVoters() {
+
+const table =
+    document.getElementById(
+        "voterTable"
+    );
+
+table.innerHTML = `
+
+    <tr>
+
+        <td
+            colspan="6"
+            class="loading"
+        >
+            Memuat data...
+
+        </td>
+
+    </tr>
+
+`;
+
+const {
+    data,
+    error
+} = await supabaseClient
+
+    .from("voters")
+
+    .select(
+        "id, nisn, name, class, has_voted"
+    )
+
+    .order(
+        "name",
+        {
+            ascending: true
+        }
+    );
+
+if (error) {
+
+    console.error(
+        "Load voters error:",
+        error
+    );
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="6"
+                style="
+                    text-align:center;
+                    color:#dc2626;
+                    padding:30px;
+                "
+            >
+                Gagal mengambil data pemilih.
+
+            </td>
+
+        </tr>
+
+    `;
+
+    return;
+
+}
+
+voters =
+    data || [];
+
+renderVoters();
+
+}
+
+/* =====================================
+RENDER
+===================================== */
+
+function renderVoters() {
+
+const table =
+    document.getElementById(
+        "voterTable"
+    );
+
+const countBox =
+    document.getElementById(
+        "countBox"
+    );
+
+const search =
+    document
+        .getElementById("search")
+        .value
+        .trim()
+        .toLowerCase();
+
+const filtered =
+    voters.filter(
+        function(voter) {
+
+            const nisn =
+                String(
+                    voter.nisn || ""
+                ).toLowerCase();
+
+            const name =
+                String(
+                    voter.name || ""
+                ).toLowerCase();
+
+            const className =
+                String(
+                    voter.class || ""
+                ).toLowerCase();
+
+            return (
+                nisn.includes(search) ||
+                name.includes(search) ||
+                className.includes(search)
+            );
+
+        }
+    );
+
+countBox.textContent =
+    "Menampilkan " +
+    filtered.length +
+    " dari " +
+    voters.length +
+    " pemilih";
+
+if (
+    filtered.length === 0
+) {
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="6"
+                class="empty"
+            >
+                Tidak ada data pemilih.
+
+            </td>
+
+        </tr>
+
+    `;
+
+    return;
+
+}
+
+table.innerHTML = "";
+
+filtered.forEach(
+    function(voter, index) {
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+        let statusHTML;
+
+        if (
+            voter.has_voted
+        ) {
+
+            statusHTML = `
+
+                <span
+                    class="status status-voted"
+                >
+                    ✓ Sudah Voting
+                </span>
+
+            `;
+
+        } else {
+
+            statusHTML = `
+
+                <span
+                    class="status status-not-voted"
+                >
+                    Belum Voting
+                </span>
+
+            `;
+
+        }
+
+        row.innerHTML = `
+
+            <td>
+                ${index + 1}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    voter.nisn
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    voter.name
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    voter.class || "-"
+                )}
+            </td>
+
+            <td>
+                ${statusHTML}
+            </td>
+
+            <td>
+
+                ${
+                    voter.has_voted
+                    ? `
+                        <button
+                            class="reset-btn"
+                            onclick="resetVote('${voter.id}')"
+                        >
+                            Reset
+                        </button>
+                    `
+                    : ""
+                }
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteVoter('${voter.id}')"
+                >
+                    Hapus
+                </button>
+
+            </td>
+
+        `;
+
+        table.appendChild(
+            row
+        );
+
+    }
+);
+
+}
+
+/* =====================================
+TAMBAH PEMILIH
+===================================== */
+
+document
+.getElementById("voterForm")
+.addEventListener(
+"submit",
+addVoter
+);
+
+async function addVoter(event) {
+
+event.preventDefault();
+
+const nisn =
+    document
+        .getElementById("nisn")
+        .value
+        .trim();
+
+const name =
+    document
+        .getElementById("name")
+        .value
+        .trim();
+
+const className =
+    document
+        .getElementById("className")
+        .value
+        .trim();
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+const button =
+    document.getElementById(
+        "saveButton"
+    );
+
+if (
+    !nisn ||
+    !name
+) {
+
+    message.textContent =
+        "NISN/NIS dan nama wajib diisi.";
+
+    message.style.color =
+        "#dc2626";
+
+    return;
+
+}
+
+button.disabled = true;
+
+button.textContent =
+    "MENYIMPAN...";
+
+message.textContent =
+    "";
+
+const {
+    error
+} = await supabaseClient
+
+    .from("voters")
+
+    .insert({
+
+        nisn: nisn,
+
+        name: name,
+
+        class: className || null,
+
+        has_voted: false
+
+    });
+
+if (error) {
+
+    console.error(
+        "Insert voter error:",
+        error
+    );
+
+    if (
+        error.code === "23505"
+    ) {
+
+        message.textContent =
+            "NISN/NIS tersebut sudah terdaftar.";
+
+    } else {
+
+        message.textContent =
+            "Gagal menyimpan pemilih: " +
+            error.message;
+
+    }
+
+    message.style.color =
+        "#dc2626";
+
+    button.disabled = false;
+
+    button.textContent =
+        "SIMPAN PEMILIH";
+
+    return;
+
+}
+
+message.textContent =
+    "✓ Pemilih berhasil ditambahkan.";
+
+message.style.color =
+    "#0f766e";
+
+document
+    .getElementById("voterForm")
+    .reset();
+
+button.disabled = false;
+
+button.textContent =
+    "SIMPAN PEMILIH";
+
+await loadVoters();
+
+}
+
+/* =====================================
+RESET VOTING
+===================================== */
+
+async function resetVote(id) {
+
+const yakin =
+    confirm(
+        "Reset voting siswa ini?\n\n" +
+        "Suara siswa tersebut juga akan dihapus."
+    );
+
+if (!yakin) {
+
+    return;
+
+}
+
+const {
+    error: voteError
+} = await supabaseClient
+
+    .from("votes")
+
+    .delete()
+
+    .eq(
+        "voter_id",
+        id
+    );
+
+if (voteError) {
+
+    console.error(
+        "Delete vote error:",
+        voteError
+    );
+
+    alert(
+        "Gagal menghapus suara lama."
+    );
+
+    return;
+
+}
+
+const {
+    error
+} = await supabaseClient
+
+    .from("voters")
+
+    .update({
+
+        has_voted: false
+
+    })
+
+    .eq(
+        "id",
+        id
+    );
+
+if (error) {
+
+    console.error(
+        "Reset voter error:",
+        error
+    );
+
+    alert(
+        "Gagal mereset status voting."
+    );
+
+    return;
+
+}
+
+alert(
+    "Voting berhasil direset."
+);
+
+await loadVoters();
+
+}
+
+/* =====================================
+HAPUS PEMILIH
+===================================== */
+
+async function deleteVoter(id) {
+
+const voter =
+    voters.find(
+        function(item) {
+
+            return item.id === id;
+
+        }
+    );
+
+const nama =
+    voter
+        ? voter.name
+        : "siswa ini";
+
+const yakin =
+    confirm(
+        "Hapus " +
+        nama +
+        "?\n\n" +
+        "Data pemilih dan suara terkait akan dihapus."
+    );
+
+if (!yakin) {
+
+    return;
+
+}
+
+/*
+Hapus suara terlebih dahulu.
+*/
+
+const {
+    error: voteError
+} = await supabaseClient
+
+    .from("votes")
+
+    .delete()
+
+    .eq(
+        "voter_id",
+        id
+    );
+
+if (voteError) {
+
+    console.error(
+        "Delete vote error:",
+        voteError
+    );
+
+    alert(
+        "Gagal menghapus suara pemilih."
+    );
+
+    return;
+
+}
+
+/*
+Hapus pemilih.
+*/
+
+const {
+    error
+} = await supabaseClient
+
+    .from("voters")
+
+    .delete()
+
+    .eq(
+        "id",
+        id
+    );
+
+if (error) {
+
+    console.error(
+        "Delete voter error:",
+        error
+    );
+
+    alert(
+        "Gagal menghapus pemilih."
+    );
+
+    return;
+
+}
+
+alert(
+    "Pemilih berhasil dihapus."
+);
+
+await loadVoters();
+
+}
+
+/* =====================================
+SEARCH
+===================================== */
+
+document
+.getElementById("search")
+.addEventListener(
+"input",
+renderVoters
+);
+
+/* =====================================
+ESCAPE HTML
+===================================== */
+
+function escapeHTML(value) {
+
+return String(
+    value ?? ""
+)
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+/* =====================================
+MULAI
+===================================== */
+
+(async function() {
+
+const loggedIn =
+    await checkLogin();
+
+if (loggedIn) {
+
+    await loadVoters();
+
+}
+
+})();
+
+</script> </body> </html>
