@@ -33,8 +33,20 @@
         margin-bottom: 30px;
     }
 
-    .dashboard-header h1 {
-        margin-bottom: 8px;
+    .dashboard-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        display: inline-block;
+        padding: 12px 18px;
+        border-radius: 10px;
+        background: #ccfbf1;
+        color: #115e59;
+        text-decoration: none;
+        font-weight: bold;
     }
 
     .logout {
@@ -80,10 +92,6 @@
         margin-bottom: 25px;
     }
 
-    .panel h2 {
-        margin-bottom: 20px;
-    }
-
     .candidate-row {
         display: flex;
         justify-content: space-between;
@@ -123,6 +131,16 @@
         font-weight: bold;
     }
 
+    .loading {
+        color: #64748b;
+        padding: 20px 0;
+    }
+
+    .error {
+        color: #dc2626;
+        padding: 20px 0;
+    }
+
     @media (max-width: 700px) {
 
         .stats {
@@ -132,6 +150,16 @@
         .dashboard-header {
             flex-direction: column;
             align-items: flex-start;
+        }
+
+        .dashboard-actions {
+            width: 100%;
+        }
+
+        .action-btn,
+        .logout {
+            width: 100%;
+            text-align: center;
         }
 
     }
@@ -157,6 +185,8 @@
 </div>
 
 </header> <main> <div class="dashboard">
+<!-- HEADER -->
+
 <div class="dashboard-header">
 
     <div>
@@ -176,12 +206,32 @@
     </div>
 
 
-    <button
-        class="logout"
-        onclick="logout()"
-    >
-        Keluar
-    </button>
+    <div class="dashboard-actions">
+
+        <a
+            href="candidates.html"
+            class="action-btn"
+        >
+            👥 Kelola Kandidat
+        </a>
+
+
+        <a
+            href="voters.html"
+            class="action-btn"
+        >
+            👨‍🎓 Kelola Pemilih
+        </a>
+
+
+        <button
+            class="logout"
+            onclick="logout()"
+        >
+            Keluar
+        </button>
+
+    </div>
 
 </div>
 
@@ -260,14 +310,68 @@
 
     <div id="results">
 
-        Memuat hasil...
+        <div class="loading">
+            Memuat hasil...
+        </div>
 
     </div>
 
 </div>
 
 
-<!-- INFO -->
+<!-- LINK SISTEM -->
+
+<div class="panel">
+
+    <h2>
+        🔗 Link Sistem
+    </h2>
+
+    <div style="
+        display:grid;
+        gap:12px;
+        margin-top:20px;
+    ">
+
+        <a
+            href="../"
+            target="_blank"
+            class="action-btn"
+        >
+            🏠 Buka Halaman Utama
+        </a>
+
+
+        <a
+            href="../vote/"
+            target="_blank"
+            class="action-btn"
+        >
+            🗳️ Buka Halaman Voting
+        </a>
+
+
+        <a
+            href="candidates.html"
+            class="action-btn"
+        >
+            👥 Kelola Kandidat
+        </a>
+
+
+        <a
+            href="voters.html"
+            class="action-btn"
+        >
+            👨‍🎓 Kelola Pemilih
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- INFORMASI -->
 
 <div class="panel">
 
@@ -278,11 +382,11 @@
     <p style="
         color:#64748b;
         line-height:1.7;
+        margin-top:10px;
     ">
 
-        Dashboard ini menampilkan jumlah pemilih,
-        jumlah suara yang telah masuk, dan hasil
-        sementara setiap kandidat.
+        Dashboard menampilkan statistik pemilih
+        dan hasil suara yang tersimpan di Supabase.
 
     </p>
 
@@ -291,4 +395,4 @@
 </div> </main> <footer>
 © 2026 MAN Blora — Admin E-Voting
 
-</footer> <script> /* ======================================== CEK LOGIN ======================================== */ if ( sessionStorage.getItem("adminLogin") !== "true" ) { window.location.href = "./"; } /* ======================================== SUPABASE ======================================== */ const SUPABASE_URL = "https://sfahuouyitpokyocveen.supabase.co"; const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY ); /* ======================================== LOAD DASHBOARD ======================================== */ async function loadDashboard() { /* ============================== TOTAL PEMILIH ============================== */ const { count: totalVoters, error: voterError } = await supabaseClient .from("voters") .select( "*", { count: "exact", head: true } ); if (voterError) { console.error(voterError); return; } /* ============================== PEMILIH SUDAH VOTING ============================== */ const { count: totalVoted, error: votedError } = await supabaseClient .from("voters") .select( "*", { count: "exact", head: true } ) .eq( "has_voted", true ); if (votedError) { console.error(votedError); return; } /* ============================== TAMPILKAN STATISTIK ============================== */ document.getElementById( "totalVoters" ).textContent = totalVoters || 0; document.getElementById( "totalVoted" ).textContent = totalVoted || 0; document.getElementById( "totalNotVoted" ).textContent = (totalVoters || 0) - (totalVoted || 0); /* ============================== AMBIL KANDIDAT ============================== */ const { data: candidates, error: candidateError } = await supabaseClient .from("candidates") .select( "id, number, name" ) .order( "number", { ascending: true } ); if (candidateError) { console.error(candidateError); return; } /* ============================== AMBIL SUARA ============================== */ const { data: votes, error: voteError } = await supabaseClient .from("votes") .select( "candidate_id" ); if (voteError) { console.error(voteError); return; } /* ============================== HITUNG SUARA ============================== */ const voteCount = {}; votes.forEach( vote => { voteCount[ vote.candidate_id ] = ( voteCount[ vote.candidate_id ] || 0 ) + 1; } ); /* ============================== TAMPILKAN HASIL ============================== */ const results = document.getElementById( "results" ); if ( !candidates || candidates.length === 0 ) { results.innerHTML = ` <p style="color:#64748b;"> Belum ada kandidat. </p> `; return; } results.innerHTML = ""; candidates.forEach( candidate => { const count = voteCount[ candidate.id ] || 0; const row = document.createElement( "div" ); row.className = "candidate-row"; row.innerHTML = ` <div class="candidate-info"> <strong> No. ${candidate.number} — ${candidate.name} </strong> <span> Jumlah suara masuk </span> </div> <div class="result-number"> ${count} </div> `; results.appendChild(row); } ); } /* ======================================== LOGOUT ======================================== */ function logout() { sessionStorage.removeItem( "adminLogin" ); window.location.href = "./"; } /* ======================================== JALANKAN ======================================== */ loadDashboard(); </script> </body> </html>
+</footer> <script> /* ======================================== SUPABASE ======================================== */ const SUPABASE_URL = "https://sfahuouyitpokyocveen.supabase.co"; const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY ); /* ======================================== CEK LOGIN SUPABASE ======================================== */ checkLogin(); async function checkLogin() { const { data, error } = await supabaseClient .auth .getSession(); if ( error || !data.session ) { window.location.href = "./"; return; } loadDashboard(); } /* ======================================== LOAD DASHBOARD ======================================== */ async function loadDashboard() { /* ============================== TOTAL PEMILIH ============================== */ const { count: totalVoters, error: voterError } = await supabaseClient .from("voters") .select( "*", { count: "exact", head: true } ); if (voterError) { console.error(voterError); showError( "Gagal mengambil data pemilih." ); return; } /* ============================== SUDAH VOTING ============================== */ const { count: totalVoted, error: votedError } = await supabaseClient .from("voters") .select( "*", { count: "exact", head: true } ) .eq( "has_voted", true ); if (votedError) { console.error(votedError); showError( "Gagal mengambil data voting." ); return; } /* ============================== STATISTIK ============================== */ document.getElementById( "totalVoters" ).textContent = totalVoters || 0; document.getElementById( "totalVoted" ).textContent = totalVoted || 0; document.getElementById( "totalNotVoted" ).textContent = (totalVoters || 0) - (totalVoted || 0); /* ============================== KANDIDAT ============================== */ const { data: candidates, error: candidateError } = await supabaseClient .from("candidates") .select( "id, number, name" ) .order( "number", { ascending: true } ); if (candidateError) { console.error(candidateError); showError( "Gagal mengambil kandidat." ); return; } /* ============================== SUARA ============================== */ const { data: votes, error: voteError } = await supabaseClient .from("votes") .select( "candidate_id" ); if (voteError) { console.error(voteError); showError( "Gagal mengambil hasil suara." ); return; } /* ============================== HITUNG SUARA ============================== */ const voteCount = {}; (votes || []).forEach( vote => { voteCount[ vote.candidate_id ] = ( voteCount[ vote.candidate_id ] || 0 ) + 1; } ); /* ============================== TAMPILKAN ============================== */ const results = document.getElementById( "results" ); if ( !candidates || candidates.length === 0 ) { results.innerHTML = ` <p style="color:#64748b;"> Belum ada kandidat. </p> `; return; } results.innerHTML = ""; candidates.forEach( candidate => { const count = voteCount[ candidate.id ] || 0; const row = document.createElement( "div" ); row.className = "candidate-row"; row.innerHTML = ` <div class="candidate-info"> <strong> No. ${candidate.number} — ${escapeHTML(candidate.name)} </strong> <span> Jumlah suara masuk </span> </div> <div class="result-number"> ${count} </div> `; results.appendChild(row); } ); } /* ======================================== LOGOUT ======================================== */ async function logout() { await supabaseClient .auth .signOut(); window.location.href = "./"; } /* ======================================== ERROR ======================================== */ function showError( text ) { document.getElementById( "results" ).innerHTML = ` <div class="error"> ${text} </div> `; } /* ======================================== ESCAPE HTML ======================================== */ function escapeHTML( text ) { return String(text) .replace( /&/g, "&amp;" ) .replace( /</g, "&lt;" ) .replace( />/g, "&gt;" ) .replace( /"/g, "&quot;" ) .replace( /'/g, "&#039;" ); } </script> </body> </html>
