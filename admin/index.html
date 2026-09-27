@@ -6,12 +6,16 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>Admin - E-Voting MAN Blora</title>
+<title>Login Admin - E-Voting MAN Blora</title>
 
 <link
     rel="stylesheet"
     href="../css/style.css"
 >
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
 
 </head> <body> <header class="navbar">
 <div class="brand">
@@ -48,7 +52,8 @@
 
 
     <p>
-        Masukkan username dan password admin.
+        Masuk menggunakan akun admin
+        yang terdaftar di sistem.
     </p>
 
 
@@ -56,9 +61,10 @@
 
 
         <input
-            id="username"
-            type="text"
-            placeholder="Username"
+            id="email"
+            type="email"
+            placeholder="Email admin"
+            autocomplete="email"
             required
 
             style="
@@ -76,6 +82,7 @@
             id="password"
             type="password"
             placeholder="Password"
+            autocomplete="current-password"
             required
 
             style="
@@ -90,6 +97,7 @@
 
 
         <button
+            id="loginButton"
             type="submit"
             class="btn-primary"
 
@@ -100,7 +108,7 @@
                 font-size:16px;
             "
         >
-            LOGIN
+            LOGIN ADMIN
         </button>
 
 
@@ -122,4 +130,4 @@
 </section> </main> <footer>
 © 2026 MAN Blora — Admin E-Voting
 
-</footer> <script> /* ======================================== LOGIN ADMIN SEDERHANA ======================================== Untuk tahap pengembangan. Nanti akan kita pindahkan ke Supabase Auth agar lebih aman. */ const ADMIN_USERNAME = "admin"; const ADMIN_PASSWORD = "admin123"; const form = document.getElementById( "loginForm" ); const message = document.getElementById( "message" ); form.addEventListener( "submit", function(event) { event.preventDefault(); const username = document .getElementById("username") .value .trim(); const password = document .getElementById("password") .value; if ( username === ADMIN_USERNAME && password === ADMIN_PASSWORD ) { sessionStorage.setItem( "adminLogin", "true" ); message.textContent = "Login berhasil..."; message.style.color = "#0f766e"; setTimeout( function() { window.location.href = "dashboard.html"; }, 500 ); } else { message.textContent = "Username atau password salah."; message.style.color = "#dc2626"; } } ); </script> </body> </html>
+</footer> <script> /* ======================================== SUPABASE ======================================== */ const SUPABASE_URL = "https://sfahuouyitpokyocveen.supabase.co"; const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY ); /* ======================================== ELEMENT ======================================== */ const form = document.getElementById( "loginForm" ); const message = document.getElementById( "message" ); const button = document.getElementById( "loginButton" ); /* ======================================== CEK SESSION ======================================== */ checkSession(); async function checkSession() { const { data } = await supabaseClient .auth .getSession(); if ( data && data.session ) { window.location.href = "dashboard.html"; } } /* ======================================== LOGIN ======================================== */ form.addEventListener( "submit", async function(event) { event.preventDefault(); const email = document .getElementById("email") .value .trim(); const password = document .getElementById("password") .value; button.disabled = true; button.textContent = "LOGIN..."; message.textContent = "Memeriksa akun..."; message.style.color = "#0f766e"; const { data, error } = await supabaseClient .auth .signInWithPassword({ email: email, password: password }); if (error) { console.error(error); message.textContent = "Email atau password salah."; message.style.color = "#dc2626"; button.disabled = false; button.textContent = "LOGIN ADMIN"; return; } if ( data && data.session ) { message.textContent = "Login berhasil..."; message.style.color = "#0f766e"; setTimeout( function() { window.location.href = "dashboard.html"; }, 500 ); } } ); </script> </body> </html>
