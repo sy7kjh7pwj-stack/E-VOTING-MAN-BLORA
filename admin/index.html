@@ -1,0 +1,125 @@
+<!DOCTYPE html> <html lang="id"> <head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Admin - E-Voting MAN Blora</title>
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+</head> <body> <header class="navbar">
+<div class="brand">
+
+    <img
+        src="../logo-manblora.png"
+        alt="Logo MAN Blora"
+    >
+
+    <div>
+
+        <h2>MAN BLORA</h2>
+
+        <span>ADMIN E-VOTING</span>
+
+    </div>
+
+</div>
+
+</header> <main> <section class="qr-section">
+<div
+    class="qr-card"
+    style="max-width:500px;"
+>
+
+    <div class="badge">
+        ADMIN
+    </div>
+
+
+    <h1 style="margin-bottom:15px;">
+        Login Admin
+    </h1>
+
+
+    <p>
+        Masukkan username dan password admin.
+    </p>
+
+
+    <form id="loginForm">
+
+
+        <input
+            id="username"
+            type="text"
+            placeholder="Username"
+            required
+
+            style="
+                width:100%;
+                padding:15px;
+                border:1px solid #cbd5e1;
+                border-radius:10px;
+                font-size:16px;
+                margin-bottom:15px;
+            "
+        >
+
+
+        <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            required
+
+            style="
+                width:100%;
+                padding:15px;
+                border:1px solid #cbd5e1;
+                border-radius:10px;
+                font-size:16px;
+                margin-bottom:15px;
+            "
+        >
+
+
+        <button
+            type="submit"
+            class="btn-primary"
+
+            style="
+                width:100%;
+                border:0;
+                cursor:pointer;
+                font-size:16px;
+            "
+        >
+            LOGIN
+        </button>
+
+
+    </form>
+
+
+    <div
+        id="message"
+
+        style="
+            margin-top:20px;
+            font-weight:bold;
+        "
+    ></div>
+
+
+</div>
+
+</section> </main> <footer>
+© 2026 MAN Blora — Admin E-Voting
+
+</footer> <script> /* ======================================== LOGIN ADMIN SEDERHANA ======================================== Untuk tahap pengembangan. Nanti akan kita pindahkan ke Supabase Auth agar lebih aman. */ const ADMIN_USERNAME = "admin"; const ADMIN_PASSWORD = "admin123"; const form = document.getElementById( "loginForm" ); const message = document.getElementById( "message" ); form.addEventListener( "submit", function(event) { event.preventDefault(); const username = document .getElementById("username") .value .trim(); const password = document .getElementById("password") .value; if ( username === ADMIN_USERNAME && password === ADMIN_PASSWORD ) { sessionStorage.setItem( "adminLogin", "true" ); message.textContent = "Login berhasil..."; message.style.color = "#0f766e"; setTimeout( function() { window.location.href = "dashboard.html"; }, 500 ); } else { message.textContent = "Username atau password salah."; message.style.color = "#dc2626"; } } ); </script> </body> </html>
