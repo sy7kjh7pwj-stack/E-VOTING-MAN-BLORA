@@ -1,719 +1,144 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html> <html lang="id"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Voting MAN Blora</title>
 
-  <title>E-Voting PEMILOS MAN Blora</title>
+<link rel="stylesheet" href="css/style.css">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #eef8f1;
-      color: #17351f;
-    }
+</head> <body> <header class="navbar"> <div class="brand">
+    <img src="logo-manblora.png" alt="Logo MAN Blora">
 
-    header {
-      background: linear-gradient(135deg, #087f3e, #05a653);
-      color: white;
-      text-align: center;
-      padding: 30px 15px;
-    }
-
-    header img {
-      width: 100px;
-      height: 100px;
-      object-fit: contain;
-    }
-
-    header h1 {
-      margin: 8px 0;
-      font-size: 30px;
-    }
-
-    header p {
-      margin: 6px 0;
-    }
-
-    .container {
-      max-width: 720px;
-      margin: 25px auto;
-      padding: 15px;
-    }
-
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 5px 20px rgba(0,0,0,.08);
-    }
-
-    h2 {
-      text-align: center;
-      color: #087f3e;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #666;
-    }
-
-    input {
-      width: 100%;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 9px;
-      font-size: 16px;
-      margin: 10px 0;
-    }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      border: 0;
-      border-radius: 9px;
-      background: #087f3e;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background: #066b34;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    .paslon {
-      border: 2px solid #d8eadc;
-      border-radius: 14px;
-      padding: 20px;
-      margin: 15px 0;
-      background: #fbfffc;
-    }
-
-    .paslon h3 {
-      color: #087f3e;
-      margin: 5px 0;
-      font-size: 21px;
-    }
-
-    .paslon button {
-      background: #f39c12;
-    }
-
-    .paslon button:hover {
-      background: #d98200;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .message {
-      padding: 13px;
-      border-radius: 9px;
-      margin-top: 12px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .success {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .error {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .info {
-      background: #e0f2fe;
-      color: #075985;
-    }
-
-    .warning {
-      background: #fef3c7;
-      color: #92400e;
-    }
-
-    .success-icon {
-      text-align: center;
-      font-size: 60px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #777;
-      font-size: 13px;
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-
-  <img
-    src="logo-manblora.png"
-    alt="Logo MAN Blora"
-    onerror="this.style.display='none'"
-  >
-
-  <h1>E-VOTING</h1>
-
-  <p><strong>PEMILOS MAN BLORA</strong></p>
-
-  <p>Pemilihan Ketua & Wakil Ketua OSIS</p>
-
-</header>
-
-
-<div class="container">
-
-  <!-- LOGIN -->
-
-  <div class="card" id="loginCard">
-
-    <h2>🗳️ Masuk untuk Memilih</h2>
-
-    <p class="subtitle">
-      Masukkan nomor peserta yang diberikan panitia.
-    </p>
-
-    <input
-      type="text"
-      id="nomorPeserta"
-      placeholder="Contoh: 001"
-      autocomplete="off"
-    >
-
-    <button id="loginButton" onclick="login()">
-      MASUK & MEMILIH
-    </button>
-
-    <div id="loginMessage"></div>
-
-  </div>
-
-
-  <!-- PEMILIHAN -->
-
-  <div class="card hidden" id="voteCard">
-
-    <h2>PILIH PASANGAN CALON</h2>
-
-    <p
-      id="namaPemilih"
-      style="text-align:center;font-weight:bold;"
-    ></p>
-
-
-    <div class="paslon">
-
-      <strong>PASLON 01</strong>
-
-      <h3>PRADIPTA & TIO</h3>
-
-      <p>Pasangan Calon Ketua & Wakil Ketua OSIS</p>
-
-      <button onclick="pilihPaslon(1)">
-        PILIH PASLON 01
-      </button>
-
+    <div>
+        <h2>MAN BLORA</h2>
+        <span>E-VOTING PEMILOS</span>
     </div>
-
-
-    <div class="paslon">
-
-      <strong>PASLON 02</strong>
-
-      <h3>KEYLA & ARSYAD</h3>
-
-      <p>Pasangan Calon Ketua & Wakil Ketua OSIS</p>
-
-      <button onclick="pilihPaslon(2)">
-        PILIH PASLON 02
-      </button>
-
-    </div>
-
-
-    <div class="paslon">
-
-      <strong>PASLON 03</strong>
-
-      <h3>NIKISA & JENIE</h3>
-
-      <p>Pasangan Calon Ketua & Wakil Ketua OSIS</p>
-
-      <button onclick="pilihPaslon(3)">
-        PILIH PASLON 03
-      </button>
-
-    </div>
-
-    <div id="voteMessage"></div>
-
-  </div>
-
-
-  <!-- BERHASIL -->
-
-  <div class="card hidden" id="successCard">
-
-    <div class="success-icon">✅</div>
-
-    <h2>SUARA BERHASIL DISIMPAN</h2>
-
-    <p style="text-align:center;">
-      Terima kasih telah mengikuti
-      E-Voting PEMILOS MAN Blora.
-    </p>
-
-    <p style="text-align:center;">
-      Suara kamu telah dicatat.
-    </p>
-
-  </div>
 
 </div>
 
+</header> <main>
+<section class="hero">
 
-<footer>
-  E-Voting PEMILOS MAN Blora
-</footer>
+    <div class="hero-content">
 
+        <div class="badge">
+            PEMILOS MAN BLORA
+        </div>
 
-<!-- SUPABASE -->
+        <h1>
+            E-Voting<br>
+            MAN Blora
+        </h1>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <p>
+            Sistem pemilihan Ketua dan Wakil OSIS
+            MAN Blora secara digital, mudah dan cepat.
+        </p>
 
-<script>
+        <a href="vote/" class="btn-primary">
+            🗳️ MULAI VOTING
+        </a>
 
-/*
-========================================================
-SUPABASE
-========================================================
-*/
+    </div>
 
-const SUPABASE_URL =
-  "https://sfahuouyitpokyocveen.supabase.co";
 
-const SUPABASE_KEY =
-  "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj";
+    <div class="hero-logo">
 
+        <img
+            src="logo-manblora.png"
+            alt="Logo MAN Blora"
+        >
 
-const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+    </div>
 
+</section>
 
-let nomorPemilih = null;
 
+<section class="qr-section">
 
-/*
-========================================================
-LOGIN
-========================================================
-*/
+    <div class="qr-card">
 
-async function login() {
+        <h2>📱 Scan QR Code</h2>
 
-  const nomor =
-    document
-      .getElementById("nomorPeserta")
-      .value
-      .trim();
+        <p>
+            Scan QR Code berikut menggunakan kamera HP
+            untuk membuka halaman voting.
+        </p>
 
-  const message =
-    document.getElementById(
-      "loginMessage"
-    );
+        <div id="qrcode"></div>
 
-  const button =
-    document.getElementById(
-      "loginButton"
-    );
+        <p
+            class="qr-link"
+            id="voteUrl"
+        ></p>
 
+        <button
+            class="btn-secondary"
+            onclick="copyLink()"
+        >
+            📋 Salin Link Voting
+        </button>
 
-  message.innerHTML = "";
+    </div>
 
+</section>
 
-  if (!nomor) {
 
-    tampilkanPesan(
-      message,
-      "Masukkan nomor peserta terlebih dahulu.",
-      "error"
-    );
+<section class="steps">
 
-    return;
-  }
+    <div class="step">
 
+        <span>1</span>
 
-  button.disabled = true;
+        <h3>Scan QR</h3>
 
-  tampilkanPesan(
-    message,
-    "Memeriksa nomor peserta...",
-    "info"
-  );
+        <p>
+            Scan QR Code PEMILOS.
+        </p>
 
+    </div>
 
-  try {
 
-    const hasil =
-      await supabaseClient
-        .from("pemilih")
-        .select(
-          "nomor_peserta,nama,sudah_memilih"
-        )
-        .eq(
-          "nomor_peserta",
-          nomor
-        )
-        .maybeSingle();
+    <div class="step">
 
+        <span>2</span>
 
-    if (hasil.error) {
+        <h3>Verifikasi</h3>
 
-      console.error(hasil.error);
+        <p>
+            Masukkan NIS/NISN.
+        </p>
 
-      tampilkanPesan(
-        message,
-        "Gagal membaca database: " +
-        hasil.error.message,
-        "error"
-      );
+    </div>
 
-      button.disabled = false;
 
-      return;
-    }
+    <div class="step">
 
+        <span>3</span>
 
-    if (!hasil.data) {
+        <h3>Pilih</h3>
 
-      tampilkanPesan(
-        message,
-        "Nomor peserta tidak ditemukan.",
-        "error"
-      );
+        <p>
+            Pilih kandidatmu.
+        </p>
 
-      button.disabled = false;
+    </div>
 
-      return;
-    }
 
+    <div class="step">
 
-    if (
-      hasil.data.sudah_memilih === true
-    ) {
+        <span>4</span>
 
-      tampilkanPesan(
-        message,
-        "Nomor peserta ini sudah digunakan untuk memilih.",
-        "warning"
-      );
+        <h3>Konfirmasi</h3>
 
-      button.disabled = false;
+        <p>
+            Kirim suara.
+        </p>
 
-      return;
-    }
+    </div>
 
+</section>
 
-    nomorPemilih =
-      hasil.data.nomor_peserta;
+</main> <footer>
+© 2026 MAN Blora — E-Voting PEMILOS
 
-
-    document
-      .getElementById("namaPemilih")
-      .textContent =
-      "Pemilih: " +
-      hasil.data.nama;
-
-
-    document
-      .getElementById("loginCard")
-      .classList
-      .add("hidden");
-
-
-    document
-      .getElementById("voteCard")
-      .classList
-      .remove("hidden");
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    tampilkanPesan(
-      message,
-      "Terjadi kesalahan: " +
-      error.message,
-      "error"
-    );
-
-    button.disabled = false;
-  }
-}
-
-
-/*
-========================================================
-VOTING
-========================================================
-*/
-
-async function pilihPaslon(
-  nomorPaslon
-) {
-
-  if (!nomorPemilih) {
-
-    alert(
-      "Sesi pemilih tidak ditemukan."
-    );
-
-    return;
-  }
-
-
-  const daftarPaslon = {
-
-    1: "PRADIPTA & TIO",
-
-    2: "KEYLA & ARSYAD",
-
-    3: "NIKISA & JENIE"
-
-  };
-
-
-  const namaPaslon =
-    daftarPaslon[nomorPaslon];
-
-
-  const yakin =
-    confirm(
-      "Kamu memilih:\n\n" +
-      "PASLON " +
-      String(nomorPaslon).padStart(2, "0") +
-      " — " +
-      namaPaslon +
-      "\n\n" +
-      "Pastikan pilihan kamu sudah benar.\n\n" +
-      "Lanjutkan?"
-    );
-
-
-  if (!yakin) {
-    return;
-  }
-
-
-  const message =
-    document.getElementById(
-      "voteMessage"
-    );
-
-
-  const buttons =
-    document.querySelectorAll(
-      ".paslon button"
-    );
-
-
-  buttons.forEach(
-    button => {
-      button.disabled = true;
-    }
-  );
-
-
-  tampilkanPesan(
-    message,
-    "Menyimpan suara...",
-    "info"
-  );
-
-
-  try {
-
-    /*
-    ================================================
-    STEP 1
-    SIMPAN SUARA
-    ================================================
-    */
-
-    const hasilSuara =
-      await supabaseClient
-        .from("suara")
-        .insert({
-          paslon: nomorPaslon
-        })
-        .select();
-
-
-    if (hasilSuara.error) {
-
-      console.error(
-        "ERROR SUARA:",
-        hasilSuara.error
-      );
-
-      tampilkanPesan(
-        message,
-        "Suara gagal disimpan: " +
-        hasilSuara.error.message,
-        "error"
-      );
-
-      buttons.forEach(
-        button => {
-          button.disabled = false;
-        }
-      );
-
-      return;
-    }
-
-
-    /*
-    ================================================
-    STEP 2
-    UPDATE STATUS PEMILIH
-    ================================================
-    */
-
-    const hasilPemilih =
-      await supabaseClient
-        .from("pemilih")
-        .update({
-          sudah_memilih: true
-        })
-        .eq(
-          "nomor_peserta",
-          nomorPemilih
-        );
-
-
-    if (hasilPemilih.error) {
-
-      console.error(
-        "ERROR PEMILIH:",
-        hasilPemilih.error
-      );
-
-      tampilkanPesan(
-        message,
-        "Suara sudah masuk, tetapi status pemilih gagal diperbarui. Hubungi admin.",
-        "warning"
-      );
-
-      return;
-    }
-
-
-    /*
-    ================================================
-    STEP 3
-    BERHASIL
-    ================================================
-    */
-
-    document
-      .getElementById("voteCard")
-      .classList
-      .add("hidden");
-
-
-    document
-      .getElementById("successCard")
-      .classList
-      .remove("hidden");
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    tampilkanPesan(
-      message,
-      "Terjadi kesalahan: " +
-      error.message,
-      "error"
-    );
-
-    buttons.forEach(
-      button => {
-        button.disabled = false;
-      }
-    );
-  }
-}
-
-
-/*
-========================================================
-PESAN
-========================================================
-*/
-
-function tampilkanPesan(
-  element,
-  text,
-  type
-) {
-
-  element.innerHTML =
-    '<div class="message ' +
-    type +
-    '">' +
-    text +
-    '</div>';
-}
-
-
-/*
-========================================================
-ENTER UNTUK LOGIN
-========================================================
-*/
-
-document
-  .getElementById("nomorPeserta")
-  .addEventListener(
-    "keydown",
-    function(event) {
-
-      if (event.key === "Enter") {
-        login();
-      }
-
-    }
-  );
-
-</script>
-
-</body>
-</html>
+</footer> <script> const voteURL = window.location.origin + "/E-VOTING-MAN-BLORA/vote/"; document.getElementById("voteUrl").textContent = voteURL; new QRCode( document.getElementById("qrcode"), { text: voteURL, width: 240, height: 240, colorDark: "#0f172a", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H } ); function copyLink() { navigator.clipboard.writeText(voteURL) .then(() => { alert("Link voting berhasil disalin."); }) .catch(() => { alert("Gagal menyalin link."); }); } </script> </body> </html>
