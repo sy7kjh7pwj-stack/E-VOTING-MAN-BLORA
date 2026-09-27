@@ -1,0 +1,110 @@
+<!DOCTYPE html> <html lang="id"> <head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Voting - MAN Blora</title>
+
+<link
+    rel="stylesheet"
+    href="../css/style.css"
+>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+</head> <body> <header class="navbar">
+<div class="brand">
+
+    <img
+        src="../logo-manblora.png"
+        alt="Logo MAN Blora"
+    >
+
+    <div>
+
+        <h2>MAN BLORA</h2>
+
+        <span>E-VOTING PEMILOS</span>
+
+    </div>
+
+</div>
+
+</header> <main> <section class="qr-section">
+<div
+    class="qr-card"
+    style="max-width:550px;"
+>
+
+    <div class="badge">
+        PEMILOS MAN BLORA
+    </div>
+
+    <h1 style="margin-bottom:15px;">
+        Verifikasi Pemilih
+    </h1>
+
+    <p>
+        Masukkan NIS/NISN untuk melanjutkan
+        ke halaman pemilihan.
+    </p>
+
+
+    <form id="voterForm">
+
+
+        <input
+            id="nis"
+            type="text"
+            placeholder="Masukkan NIS / NISN"
+            autocomplete="off"
+            required
+
+            style="
+                width:100%;
+                padding:15px;
+                border:1px solid #cbd5e1;
+                border-radius:10px;
+                font-size:16px;
+                margin-bottom:15px;
+            "
+        >
+
+
+        <button
+            type="submit"
+            class="btn-primary"
+
+            style="
+                width:100%;
+                border:0;
+                cursor:pointer;
+                font-size:16px;
+            "
+        >
+            LANJUTKAN
+        </button>
+
+    </form>
+
+
+    <div
+        id="message"
+
+        style="
+            margin-top:20px;
+            font-weight:bold;
+        "
+    ></div>
+
+</div>
+
+</section> </main> <footer>
+© 2026 MAN Blora — E-Voting PEMILOS
+
+</footer> <script> /* ======================================== KONEKSI SUPABASE ======================================== */ const SUPABASE_URL = "https://sfahuouyitpokyocveen.supabase.co"; const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_fM4wSbJpKNa9mU-LvX4GVg_kHJCCbfj"; const supabaseClient = window.supabase.createClient( SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY ); /* ======================================== FORM PEMILIH ======================================== */ const form = document.getElementById("voterForm"); const message = document.getElementById("message"); form.addEventListener( "submit", async function(event) { event.preventDefault(); const nis = document .getElementById("nis") .value .trim(); if (!nis) { showMessage( "NIS/NISN wajib diisi.", "#dc2626" ); return; } showMessage( "Memeriksa data pemilih...", "#0f766e" ); /* ======================================== CARI PEMILIH DI SUPABASE ======================================== */ const { data, error } = await supabaseClient .from("voters") .select( "id, nis, name, class, has_voted" ) .eq("nis", nis) .maybeSingle(); /* ======================================== ERROR DATABASE ======================================== */ if (error) { console.error(error); showMessage( "Terjadi kesalahan database.", "#dc2626" ); return; } /* ======================================== NIS TIDAK ADA ======================================== */ if (!data) { showMessage( "NIS/NISN tidak terdaftar.", "#dc2626" ); return; } /* ======================================== SUDAH VOTING ======================================== */ if (data.has_voted) { showMessage( "Pemilih ini sudah menggunakan hak pilih.", "#dc2626" ); return; } /* ======================================== SIMPAN DATA PEMILIH SEMENTARA ======================================== */ sessionStorage.setItem( "voter", JSON.stringify(data) ); showMessage( "Verifikasi berhasil.", "#0f766e" ); /* ======================================== MASUK KE HALAMAN KANDIDAT ======================================== */ setTimeout( function() { window.location.href = "../candidates/"; }, 700 ); } ); /* ======================================== TAMPILKAN PESAN ======================================== */ function showMessage( text, color ) { message.textContent = text; message.style.color = color; } </script> </body> </html>
